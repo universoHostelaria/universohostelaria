@@ -96,11 +96,11 @@ export default function SolicitudModal({ onClose }: Props) {
           <div className={styles.headerLeft}>
             {step !== 'enviado' && (
               <div className={styles.steps}>
-                <div className={`${styles.step} ${step === 'empresa' ? styles.stepActive : styles.stepDone}`}>
+                <div className={[styles.step, step === 'empresa' ? styles.stepActive : styles.stepDone].join(' ')}>
                   <span>1</span> Datos
                 </div>
                 <div className={styles.stepLine} />
-                <div className={`${styles.step} ${step === 'confirma' ? styles.stepActive : step === 'enviado' ? styles.stepDone : ''}`}>
+                <div className={[styles.step, step === 'confirma' ? styles.stepActive : (step as string) === 'enviado' ? styles.stepDone : ''].filter(Boolean).join(' ')}>
                   <span>2</span> Confirmación
                 </div>
               </div>
