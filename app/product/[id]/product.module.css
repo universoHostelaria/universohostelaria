@@ -1,0 +1,96 @@
+.bc {
+  max-width: 1360px; margin: 0 auto; padding: 18px 32px;
+  display: flex; align-items: center; gap: 8px; font-size: 12px; color: #AAAAAA;
+}
+.bc a { color: #AAAAAA; text-decoration: none; }
+.bc a:hover { color: #0D0D0D; }
+.bc span { color: #E8E8E8; }
+.bcCur { color: #0D0D0D; font-weight: 500; }
+
+.productWrap {
+  max-width: 1360px; margin: 0 auto; padding: 0 32px 80px;
+  display: grid; grid-template-columns: 1fr 480px; gap: 64px; align-items: start;
+}
+
+/* Gallery */
+.gallery {}
+.mainImg {
+  border-radius: 20px; overflow: hidden; background: #FFFFFF;
+  aspect-ratio: 1/1; position: relative; margin-bottom: 12px; border: 1.5px solid #E8E8E8;
+}
+.mainImgEl { object-fit: cover; }
+.imgPlaceholder {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center; background: #F5F5F3;
+}
+.badges { position: absolute; top: 16px; left: 16px; display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* Info Panel */
+.infoPanel { position: sticky; top: calc(66px + 24px); }
+.supplier { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #AAAAAA; margin-bottom: 8px; }
+.productTitle {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(40px, 4vw, 56px); line-height: .96; letter-spacing: .02em; margin-bottom: 8px;
+}
+.ref { font-family: monospace; font-size: 12px; color: #AAAAAA; margin-bottom: 20px; }
+
+.priceBlock {
+  background: #FFFFFF; border: 1.5px solid #E8E8E8;
+  border-radius: 18px; padding: 20px 22px; margin-bottom: 20px;
+}
+.price { font-family: 'Bebas Neue', sans-serif; font-size: 38px; letter-spacing: .02em; line-height: 1; color: #0D0D0D; margin-bottom: 4px; }
+.priceNote { font-size: 12px; color: #AAAAAA; font-weight: 300; }
+.priceNote a { color: #2B6FD4; text-decoration: none; font-weight: 500; }
+
+.ctaStack { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.ctaFull { width: 100%; justify-content: center; }
+.ctaOr { display: flex; align-items: center; gap: 12px; color: #AAAAAA; font-size: 12px; }
+.ctaOr::before, .ctaOr::after { content: ''; flex: 1; height: 1px; background: #E8E8E8; }
+
+.trust { display: flex; flex-direction: column; gap: 8px; padding: 16px 0; border-top: 1px solid #E8E8E8; }
+.trustItem { display: flex; align-items: center; gap: 10px; font-size: 12.5px; color: #555; }
+
+/* Specs */
+.specsWrap { max-width: 1360px; margin: 0 auto; padding: 0 32px 80px; }
+.specsTitle { font-family: 'Bebas Neue', sans-serif; font-size: clamp(32px,3.5vw,48px); letter-spacing: .02em; line-height: .96; margin-bottom: 0; margin-top: 8px; }
+.specsGrid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 2px; background: #E8E8E8; border-radius: 20px; overflow: hidden; margin-top: 32px;
+}
+.specItem { background: #FFFFFF; padding: 22px 26px; display: flex; flex-direction: column; gap: 3px; }
+.specKey { font-size: 10.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #AAAAAA; }
+.specVal { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: .02em; color: #0D0D0D; line-height: 1; }
+.specSub { font-size: 11px; color: #AAAAAA; }
+
+/* Related */
+.relatedWrap { max-width: 1360px; margin: 0 auto; padding: 0 32px 80px; }
+.relatedHeader { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 32px; gap: 16px; }
+.relatedGrid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+
+/* Strip */
+.strip { background: #0D0D0D; padding: 56px 0; }
+.stripInner {
+  max-width: 1360px; margin: 0 auto; padding: 0 32px;
+  display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap;
+}
+.stripBtn {
+  display: inline-flex; align-items: center; gap: 9px;
+  background: #2B6FD4; color: #fff; padding: 14px 28px;
+  border-radius: 9px; font-size: 14.5px; font-weight: 500;
+  text-decoration: none; transition: all .2s; flex-shrink: 0;
+}
+.stripBtn:hover { background: #1A4FA0; transform: translateY(-2px); }
+
+@media (max-width: 1100px) {
+  .productWrap { grid-template-columns: 1fr; gap: 40px; }
+  .infoPanel { position: static; }
+  .relatedGrid { grid-template-columns: repeat(2,1fr); }
+}
+@media (max-width: 768px) {
+  .productWrap, .specsWrap, .relatedWrap { padding-left: 20px; padding-right: 20px; }
+  .bc { padding: 14px 20px; }
+  .specsGrid { grid-template-columns: 1fr; }
+  .relatedGrid { grid-template-columns: 1fr 1fr; }
+  .stripInner { flex-direction: column; align-items: flex-start; }
+  .stripBtn { width: 100%; justify-content: center; }
+}

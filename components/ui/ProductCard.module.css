@@ -1,0 +1,124 @@
+.card {
+  background: #FFFFFF;
+  border: 1.5px solid #E8E8E8;
+  border-radius: 18px;
+  overflow: hidden;
+  transition: all .22s;
+  cursor: pointer;
+  text-decoration: none;
+  color: #0D0D0D;
+  display: block;
+}
+.card:hover {
+  border-color: rgba(0,0,0,.14);
+  transform: translateY(-4px);
+  box-shadow: 0 14px 44px rgba(0,0,0,.09);
+}
+.imgWrap {
+  aspect-ratio: 3/4;
+  background: #FFFFFF;
+  position: relative;
+  overflow: hidden;
+}
+.img {
+  object-fit: cover;
+  transition: transform .5s cubic-bezier(.25,.46,.45,.94);
+}
+.card:hover .img { transform: scale(1.04); }
+.imgPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #F5F5F3;
+}
+.badges {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.info { padding: 14px 16px 18px; }
+.supplier {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: #AAAAAA;
+  margin-bottom: 3px;
+}
+.name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 19px;
+  letter-spacing: .02em;
+  margin-bottom: 3px;
+  line-height: 1.1;
+}
+.dims { font-size: 11.5px; color: #AAAAAA; margin-bottom: 10px; }
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.price {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: .02em;
+}
+.priceNote { font-size: 10px; color: #AAAAAA; margin-top: 1px; font-weight: 300; }
+.addBtn {
+  width: 34px;
+  height: 34px;
+  background: #0D0D0D;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all .2s;
+  flex-shrink: 0;
+  font-size: 18px;
+  font-weight: 300;
+}
+.addBtn:hover { background: #2B6FD4; transform: scale(1.08); }
+
+/* List view */
+.listView {
+  border-radius: 0;
+  transform: none !important;
+  box-shadow: none !important;
+  display: flex;
+  align-items: center;
+  border: none;
+  border-bottom: 1px solid #E8E8E8;
+}
+.listView:hover { background: #F5F5F3; }
+.listView .imgWrap {
+  width: 120px;
+  height: 120px;
+  flex-shrink: 0;
+  aspect-ratio: unset;
+  border-radius: 10px;
+  margin: 12px;
+}
+.listView .info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 16px 20px 16px 0;
+}
+.listView .name { font-size: 22px; }
+.listView .dims { margin-bottom: 0; }
+.listView .footer {
+  margin-left: auto;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  padding-right: 4px;
+}

@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue:       #2B6FD4;
+  --blue-dark:  #1A4FA0;
+  --blue-light: #EBF2FD;
+  --black:      #0D0D0D;
+  --white:      #FFFFFF;
+  --off:        #F5F5F3;
+  --gray-1:     #E8E8E8;
+  --gray-2:     #AAAAAA;
+  --gray-3:     #555555;
+  --success:    #16A34A;
+  --heading:    'Bebas Neue', sans-serif;
+  --body:       'Inter', system-ui, sans-serif;
+  --r:          10px;
+  --r-lg:       18px;
+  --r-xl:       20px;
+  --max-w:      1360px;
+  --nav-h:      66px;
+  color-scheme: light only;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--body);
+  color: var(--black);
+  background: #FFFFFF;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ── Utility classes used across components ── */
+.heading { font-family: var(--heading); letter-spacing: .02em; line-height: .96; }
+.eyebrow { font-family: var(--heading); font-size: 13px; letter-spacing: .12em; color: var(--blue); text-transform: uppercase; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 10px 20px; border-radius: var(--r);
+  font-family: var(--body); font-size: 13.5px; font-weight: 500;
+  text-decoration: none; border: none; cursor: pointer;
+  transition: all .2s; white-space: nowrap;
+}
+.btn-dark  { background: #0D0D0D; color: #fff; }
+.btn-dark:hover  { background: #222; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,.2); }
+.btn-blue  { background: var(--blue); color: #fff; }
+.btn-blue:hover  { background: var(--blue-dark); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(43,111,212,.3); }
+.btn-ol    { background: transparent; color: #0D0D0D; border: 1.5px solid #E8E8E8; }
+.btn-ol:hover    { border-color: #0D0D0D; }
+.btn-lg    { padding: 14px 28px; font-size: 15px; border-radius: 9px; }
+.btn-sm    { padding: 7px 14px; font-size: 12px; border-radius: 7px; }
+
+.badge {
+  font-size: 9.5px; font-weight: 600; letter-spacing: .05em;
+  text-transform: uppercase; padding: 3px 9px; border-radius: 100px;
+}
+.badge-black   { background: #0D0D0D; color: #fff; }
+.badge-green   { background: #16A34A; color: #fff; }
+.badge-blue    { background: #EBF2FD; color: #1A4FA0; }
+
+.divider { border: none; border-top: 1px solid #E8E8E8; }
+
+/* Shared section padding */
+.section { max-width: var(--max-w); margin: 0 auto; padding: 88px 32px; }
+.section-sm { max-width: var(--max-w); margin: 0 auto; padding: 48px 32px; }
+@media (max-width: 768px) {
+  .section { padding: 56px 20px; }
+  .section-sm { padding: 32px 20px; }
+}
