@@ -29,7 +29,7 @@ export default function CatalogClient({ filterOptions }: { filterOptions: Filter
 
   const fetchProducts = useCallback(async () => {
     setLoading(true)
-    let q = supabase.from('products').select('*', { count: 'exact' }).eq('active', true)
+    let q = supabase.from('products').select('*', { count: 'exact' }).eq('active', true).not('img_url', 'is', null)
     if (selCat.length)  q = q.in('category', selCat)
     if (selUso.length)  q = q.in('uso', selUso)
     if (selMat.length)  q = q.in('material', selMat)
@@ -216,7 +216,7 @@ export default function CatalogClient({ filterOptions }: { filterOptions: Filter
         ) : products.length === 0 ? (
           <div className={styles.empty}>
             <div className={styles.emptyTitle}>SIN RESULTADOS</div>
-            <p>Prueba cambiando los filtros o <Link href="/#especialista" style={{color:'#2B6FD4'}}>habla con el especialista</Link>.</p>
+            <p>Prueba cambiando los filtros o <Link href="https://wa.me/34665953186?text=Hola%2C%20me%20gustar%C3%ADa%20hablar%20con%20un%20especialista." target="_blank" rel="noopener noreferrer" style={{color:'#2B6FD4'}}>habla con el especialista</Link>.</p>
           </div>
         ) : (
           <div className={`${styles.grid} ${
@@ -315,7 +315,7 @@ function SpecialistCard() {
           Un especialista te ayuda a encontrar el mobiliario ideal para tu proyecto.
         </p>
       </div>
-      <Link href="/#especialista" className={styles.specBtn}>
+      <Link href="https://wa.me/34665953186?text=Hola%2C%20me%20gustar%C3%ADa%20hablar%20con%20un%20especialista." target="_blank" rel="noopener noreferrer" className={styles.specBtn}>
         <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
           <rect x="2" y="4" width="12" height="10" rx="1.5" stroke="white" strokeWidth="1.4"/>
           <path d="M2 7h12M5 2v4M11 2v4" stroke="white" strokeWidth="1.4" strokeLinecap="round"/>

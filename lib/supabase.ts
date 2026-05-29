@@ -5,7 +5,7 @@ const supabaseAnon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 export const supabase = createClient(supabaseUrl, supabaseAnon)
 
-// ── Types ─────────────────────────────────────────────────────
+// ── Types ──────────────────────────────────────────────────────
 export type Product = {
   id:               string
   supplier_id:      string
@@ -30,13 +30,6 @@ export type Product = {
   created_at:       string
 }
 
-export type Supplier = {
-  id:          string
-  name:        string
-  logo_url:    string | null
-  description: string | null
-}
-
 export type FilterState = {
   category:  string[]
   uso:       string[]
@@ -47,7 +40,19 @@ export type FilterState = {
   search:    string
 }
 
-// ── Query helpers ─────────────────────────────────────────────
+// ── Query helpers ──────────────────────────────────────────────
+
+export async function getFeaturedProducts() {
+  const { data } = await supabase
+    .from('products')
+    .select('*')
+    .eq('active', true)
+    .not('img_url', 'is', null)       // only products WITH images
+    .order('is_new', { ascending: false })
+    .limit(4)
+  return data || []
+}
+
 export async function getProducts(
   filters: Partial<FilterState> = {},
   page = 1,
@@ -57,6 +62,7 @@ export async function getProducts(
     .from('products')
     .select('*', { count: 'exact' })
     .eq('active', true)
+    .not('img_url', 'is', null)       // only products WITH images
 
   if (filters.category?.length)  q = q.in('category', filters.category)
   if (filters.uso?.length)       q = q.in('uso', filters.uso)
@@ -66,7 +72,13 @@ export async function getProducts(
   if (filters.priceMax)          q = q.lte('price', filters.priceMax)
   if (filters.search)            q = q.ilike('name', `%${filters.search}%`)
 
-  q = q.range((page - 1) * perPage, page * perPage - 1).order('name')
+  if (filters.category?.length === 0 && !filters.search) {
+    q = q.order('name')
+  } else {
+    q = q.order('name')
+  }
+
+  q = q.range((page - 1) * perPage, page * perPage - 1)
   return q
 }
 
@@ -80,6 +92,7 @@ export async function getRelatedProducts(id: string, category: string | null) {
     .select('*')
     .eq('category', category ?? '')
     .eq('active', true)
+    .not('img_url', 'is', null)
     .neq('id', id)
     .limit(3)
 }
@@ -89,9 +102,10 @@ export async function getFilterOptions() {
     .from('products')
     .select('category, uso, material')
     .eq('active', true)
+    .not('img_url', 'is', null)
 
   const cats = [...new Set(data?.map(p => p.category).filter(Boolean))].sort()
   const uses = [...new Set(data?.map(p => p.uso).filter(Boolean))].sort()
   const mats = [...new Set(data?.map(p => p.material).filter(Boolean))].sort()
-  return { categories: cats, uses, materials: mats }
+  return { categories: cats as string[], uses: uses as string[], materials: mats as string[] }
 }

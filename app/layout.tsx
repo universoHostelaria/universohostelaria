@@ -1,5 +1,8 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { CartProvider } from '@/components/ui/CartContext'
+import CartDrawer from '@/components/ui/CartDrawer'
+import CartButton from '@/components/ui/CartButton'
 
 export const metadata: Metadata = {
   title: 'Universo Hostelería — Mobiliario profesional para hostelería',
@@ -14,7 +17,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="color-scheme" content="light only" />
       </head>
       <body style={{ margin: 0, padding: 0, background: '#FFFFFF', colorScheme: 'light' }}>
-        {children}
+        <CartProvider>
+          {children}
+          <CartDrawer />
+          <CartButton />
+        </CartProvider>
       </body>
     </html>
   )

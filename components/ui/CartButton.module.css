@@ -1,0 +1,49 @@
+.btn {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #0D0D0D;
+  color: #fff;
+  border: none;
+  border-radius: 100px;
+  padding: 14px 20px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(0,0,0,.25);
+  transition: all .2s;
+  animation: popIn .3s cubic-bezier(.34,1.56,.64,1);
+}
+.btn:hover {
+  background: #2B6FD4;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(43,111,212,.35);
+}
+.label { white-space: nowrap; }
+.badge {
+  background: #2B6FD4;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.btn:hover .badge { background: #fff; color: #2B6FD4; }
+@keyframes popIn {
+  from { opacity:0; transform:translateY(20px) scale(.8); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
+}
+@media (max-width: 480px) {
+  .btn { bottom: 20px; right: 20px; padding: 12px 16px; font-size: 13px; }
+  .label { display: none; }
+}
