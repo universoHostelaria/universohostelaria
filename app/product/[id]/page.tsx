@@ -1,4 +1,6 @@
 import { notFound } from 'next/navigation'
+import Navbar from '@/components/layout/Navbar'
+import Footer from '@/components/layout/Footer'
 import Image from 'next/image'
 import Link from 'next/link'
 import { supabase, getProduct, getRelatedProducts } from '@/lib/supabase'
@@ -47,6 +49,7 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <>
+      <Navbar />
       {/* Breadcrumb */}
       <div className={styles.bc}>
         <Link href="/">Inicio</Link><span>/</span>
@@ -184,6 +187,7 @@ export default async function ProductPage({ params }: Props) {
           </Link>
         </div>
       </div>
+      <Footer />
     </>
   )
 }
