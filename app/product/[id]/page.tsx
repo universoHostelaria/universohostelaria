@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { supabase, getProduct, getRelatedProducts } from '@/lib/supabase'
 import ProductCard from '@/components/ui/ProductCard'
+import ProductActions from '@/components/ui/ProductActions'
 import styles from './product.module.css'
 
 export const revalidate = 3600
@@ -101,25 +102,8 @@ export default async function ProductPage({ params }: Props) {
           </div>
 
           {/* CTAs */}
-          <div className={styles.ctaStack}>
-            <Link href={`mailto:hola@universohosteleria.es?subject=Solicitud de pedido — ${product.name}&body=Producto: ${product.name}%0ARef: ${product.id}%0ACantidad: `}
-              className={`btn btn-dark btn-lg ${styles.ctaFull}`}>
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <rect x="2" y="4" width="12" height="10" rx="1.5" stroke="white" strokeWidth="1.4"/>
-                <path d="M2 7h12" stroke="white" strokeWidth="1.4"/>
-              </svg>
-              Enviar solicitud de pedido
-            </Link>
-            <div className={styles.ctaOr}>o</div>
-            <Link href="https://wa.me/34665953186?text=Hola%2C+me+gustar%C3%ADa+hablar+con+un+especialista" target="_blank" rel="noopener noreferrer" className={`btn btn-blue btn-lg ${styles.ctaFull}`}>
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M8 1a5 5 0 1 1 0 10A5 5 0 0 1 8 1zm0 11c-3.3 0-6 1.3-6 2.5V15h12v-.5c0-1.2-2.7-2.5-6-2.5z" stroke="white" strokeWidth="1.4"/>
-              </svg>
-              Hablar con el especialista
-            </Link>
-          </div>
-
-          {/* Trust */}
+          <ProductActions product={product} />
+                    {/* Trust */}
           <div className={styles.trust}>
             {['Entrega coordinada en toda España','Precio directo de fabricante','Especialista disponible para tu proyecto'].map(t => (
               <div key={t} className={styles.trustItem}>

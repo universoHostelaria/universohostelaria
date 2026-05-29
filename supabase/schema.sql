@@ -94,3 +94,31 @@ create table if not exists pedido_requests (
 );
 alter table pedido_requests enable row level security;
 create policy "Anyone can insert pedido" on pedido_requests for insert with check (true);
+
+-- ── ORDERS (solicitudes de pedido) ──────────────────────────────
+-- Drop old pedido_requests and replace with full orders table
+create table if not exists orders (
+  id                  uuid primary key default uuid_generate_v4(),
+  -- Empresa
+  empresa_nombre      text not null,
+  empresa_cif         text,
+  empresa_direccion   text,
+  empresa_ciudad      text,
+  empresa_cp          text,
+  -- Responsable
+  contacto_nombre     text not null,
+  contacto_email      text not null,
+  contacto_telefono   text,
+  -- Productos (JSON array)
+  items               jsonb not null,  -- [{product_id, name, qty, color, price, subtotal}]
+  total_estimado      numeric(10,2),
+  -- Estado
+  status              text default 'pending',  -- pending | contacted | quoted | closed
+  notas               text,
+  created_at          timestamptz default now()
+);
+
+alter table orders enable row level security;
+create policy "Anyone can insert order" on orders for insert with check (true);
+-- Only authenticated (admin) can read orders
+create policy "Auth can read orders" on orders for select using (auth.role() = 'authenticated');
