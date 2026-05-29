@@ -12,7 +12,7 @@
   height: 66px;
   display: flex;
   align-items: center;
-  gap: 32px;
+  position: relative;
 }
 .logo {
   display: flex;
@@ -35,19 +35,23 @@
   text-transform: uppercase;
   margin-top: 2px;
 }
+/* Centered links */
 .links {
   display: flex;
-  gap: 24px;
+  gap: 28px;
   list-style: none;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 .links a {
   font-size: 13px;
   color: #555555;
   text-decoration: none;
   transition: color .15s;
+  white-space: nowrap;
 }
 .links a:hover { color: #0D0D0D; }
-
 .actions {
   margin-left: auto;
   display: flex;
@@ -69,7 +73,6 @@
   width: 210px;
 }
 .searchBtn:hover { border-color: #ccc; color: #555; }
-
 .hamburger {
   display: none;
   flex-direction: column;
@@ -103,7 +106,6 @@
   transition: background .15s;
 }
 .mobileMenu a:hover { background: #F5F5F3; }
-
 @media (max-width: 1100px) {
   .links, .searchBtn { display: none; }
   .hamburger { display: flex; }
