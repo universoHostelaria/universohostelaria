@@ -1,5 +1,5 @@
 .bc {
-  max-width: 1360px; margin: 0 auto; padding: 18px 32px;
+  max-width: 100%; margin: 0 auto; padding: 18px 5%;
   display: flex; align-items: center; gap: 8px; font-size: 12px; color: #AAAAAA;
 }
 .bc a { color: #AAAAAA; text-decoration: none; }
@@ -8,7 +8,7 @@
 .bcCur { color: #0D0D0D; font-weight: 500; }
 
 .productWrap {
-  max-width: 1360px; margin: 0 auto; padding: 0 32px 80px;
+  max-width: 100%; margin: 0 auto; padding: 0 5% 80px;
   display: grid; grid-template-columns: 1fr 480px; gap: 64px; align-items: start;
 }
 
@@ -51,7 +51,7 @@
 .trustItem { display: flex; align-items: center; gap: 10px; font-size: 12.5px; color: #555; }
 
 /* Specs */
-.specsWrap { max-width: 1360px; margin: 0 auto; padding: 0 32px 80px; }
+.specsWrap { max-width: 100%; margin: 0 auto; padding: 0 5% 80px; }
 .specsTitle { font-family: 'Bebas Neue', sans-serif; font-size: clamp(32px,3.5vw,48px); letter-spacing: .02em; line-height: .96; margin-bottom: 0; margin-top: 8px; }
 .specsGrid {
   display: grid; grid-template-columns: 1fr 1fr;
@@ -63,14 +63,14 @@
 .specSub { font-size: 11px; color: #AAAAAA; }
 
 /* Related */
-.relatedWrap { max-width: 1360px; margin: 0 auto; padding: 0 32px 80px; }
+.relatedWrap { max-width: 100%; margin: 0 auto; padding: 0 5% 80px; }
 .relatedHeader { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 32px; gap: 16px; }
 .relatedGrid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
 
 /* Strip */
 .strip { background: #0D0D0D; padding: 56px 0; }
 .stripInner {
-  max-width: 1360px; margin: 0 auto; padding: 0 32px;
+  max-width: 100%; margin: 0 auto; padding: 0 5%;
   display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap;
 }
 .stripBtn {
@@ -87,8 +87,8 @@
   .relatedGrid { grid-template-columns: repeat(2,1fr); }
 }
 @media (max-width: 768px) {
-  .productWrap, .specsWrap, .relatedWrap { padding-left: 20px; padding-right: 20px; }
-  .bc { padding: 14px 20px; }
+  .productWrap, .specsWrap, .relatedWrap { padding-left: 5%; padding-right: 5%; }
+  .bc { padding: 14px 5%; }
   .specsGrid { grid-template-columns: 1fr; }
   .relatedGrid { grid-template-columns: 1fr 1fr; }
   .stripInner { flex-direction: column; align-items: flex-start; }
