@@ -122,3 +122,24 @@
   gap: 10px;
   padding-right: 4px;
 }
+
+@media (max-width: 768px) {
+  .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+  }
+  .imgWrap {
+    width: 100%;
+    height: auto;
+  }
+  .info {
+    padding: 10px;
+    text-align: center;
+  }
+  .footer {
+    flex-direction: column;
+    align-items: center;
+  }
+}
