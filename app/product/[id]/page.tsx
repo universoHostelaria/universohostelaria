@@ -93,27 +93,8 @@ export default async function ProductPage({ params }: Props) {
           <h1 className={styles.productTitle}>{product.name}</h1>
           {product.cod_interno && <div className={styles.ref}>Ref. {product.cod_interno}</div>}
 
-          {/* Price */}
-          <div className={styles.priceBlock}>
-            <div className={styles.price}>{product.price_display}</div>
-            <div className={styles.priceNote}>
-              Precio mayorista · IVA no incluido
-            </div>
-          </div>
-
           {/* CTAs */}
           <ProductActions product={product} />
-                    {/* Trust */}
-          <div className={styles.trust}>
-            {['Entrega coordinada en toda España','Precio directo de fabricante','Especialista disponible para tu proyecto'].map(t => (
-              <div key={t} className={styles.trustItem}>
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                  <path d="M3 8l3.5 3.5L13 4" stroke="#2B6FD4" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-                {t}
-              </div>
-            ))}
-          </div>
         </div>
       </div>
 
