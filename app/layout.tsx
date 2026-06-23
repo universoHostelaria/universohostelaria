@@ -1,8 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { CartProvider } from '@/components/ui/CartContext'
-import CartDrawer from '@/components/ui/CartDrawer'
-import CartButton from '@/components/ui/CartButton'
+import SiteChrome from '@/components/ui/SiteChrome'
 
 export const metadata: Metadata = {
   title: 'Universo Hostelería — Mobiliario profesional para hostelería',
@@ -19,8 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body style={{ margin: 0, padding: 0, background: '#FFFFFF', colorScheme: 'light' }}>
         <CartProvider>
           {children}
-          <CartDrawer />
-          <CartButton />
+          <SiteChrome />
         </CartProvider>
       </body>
     </html>
