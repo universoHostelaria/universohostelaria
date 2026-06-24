@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
@@ -6,18 +7,60 @@ import Link from 'next/link'
 import { supabase, getProduct, getRelatedProducts } from '@/lib/supabase'
 import ProductCard from '@/components/ui/ProductCard'
 import ProductActions from '@/components/ui/ProductActions'
+import { SITE_URL, supplierName as supplierLabel } from '@/lib/seo'
 import styles from './product.module.css'
 
 export const revalidate = 3600
 
 type Props = { params: { id: string } }
 
-export async function generateMetadata({ params }: Props) {
+// Descrição rica em keywords do setor (mobiliario de hostelería).
+function productDescription(p: {
+  name: string; category: string | null; material: string | null; uso: string | null; supplier_id: string
+}) {
+  return [
+    p.name,
+    p.category ? `— ${p.category}` : '',
+    p.material ? `de ${p.material}` : '',
+    'para hostelería.',
+    p.uso ? `Uso ${p.uso.toLowerCase()}.` : '',
+    `Mobiliario profesional para bares, restaurantes y hoteles, de ${supplierLabel(p.supplier_id)}.`,
+    'Precio directo de fábrica y entrega en toda España.',
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { data } = await getProduct(params.id)
-  if (!data) return { title: 'Producto — Universo Hostelería' }
+  if (!data) return { title: 'Producto no encontrado' }
+
+  const supplier = supplierLabel(data.supplier_id)
+  const description = productDescription(data)
+  const url = `/product/${data.id}`
+  const images = data.img_url
+    ? [{ url: data.img_url, width: 1200, height: 1200, alt: data.name }]
+    : undefined
+
   return {
-    title: `${data.name} — Universo Hostelería`,
-    description: `${data.name} de ${data.supplier_id}. ${data.dimensions_raw || ''}`,
+    title: data.name,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title: `${data.name} — ${supplier}`,
+      description,
+      url,
+      type: 'website',
+      images,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${data.name} — Universo Hostelería`,
+      description,
+      images: data.img_url ? [data.img_url] : undefined,
+    },
   }
 }
 
@@ -48,8 +91,48 @@ export default async function ProductPage({ params }: Props) {
     product.modelo ? { key: 'Modelo', val: product.modelo, sub: '' } : null,
   ].filter(Boolean) as {key:string;val:string|null;sub:string}[]
 
+  const productUrl = `${SITE_URL}/product/${product.id}`
+  const productJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    image: product.img_url ? [product.img_url] : undefined,
+    description: productDescription(product),
+    category: product.category ?? undefined,
+    sku: product.cod_interno ?? product.id,
+    mpn: product.cod_comercial ?? undefined,
+    material: product.material ?? undefined,
+    brand: { '@type': 'Brand', name: supplierName },
+    ...(product.price
+      ? {
+          offers: {
+            '@type': 'Offer',
+            price: product.price,
+            priceCurrency: 'EUR',
+            availability: 'https://schema.org/InStock',
+            url: productUrl,
+            seller: { '@type': 'Organization', name: 'Universo Hostelería' },
+          },
+        }
+      : {}),
+  }
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Catálogo', item: `${SITE_URL}/catalog` },
+      ...(product.category
+        ? [{ '@type': 'ListItem', position: 3, name: product.category, item: `${SITE_URL}/catalog?category=${encodeURIComponent(product.category)}` }]
+        : []),
+      { '@type': 'ListItem', position: product.category ? 4 : 3, name: product.name, item: productUrl },
+    ],
+  }
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <Navbar />
       {/* Breadcrumb */}
       <div className={styles.bc}>

@@ -7,7 +7,12 @@ export const revalidate = 60
 
 export async function generateMetadata() {
   const c = await getHomeContent()
-  return { title: c.seo.title, description: c.seo.description }
+  return {
+    title: { absolute: c.seo.title },
+    description: c.seo.description,
+    alternates: { canonical: '/' },
+    openGraph: { title: c.seo.title, description: c.seo.description, url: '/', type: 'website' },
+  }
 }
 
 // ── SVGs decorativos (fixos no layout, indexados por posição) ──

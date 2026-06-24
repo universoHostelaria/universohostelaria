@@ -1,11 +1,19 @@
 'use client'
 
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase-browser'
 import '../admin.css'
 
 export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="adm-body" style={{ minHeight: '100vh' }} />}>
+      <LoginForm />
+    </Suspense>
+  )
+}
+
+function LoginForm() {
   const router = useRouter()
   const params = useSearchParams()
   const supabase = createClient()
