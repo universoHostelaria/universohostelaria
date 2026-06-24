@@ -1,4 +1,6 @@
 import { ImageResponse } from 'next/og'
+import { readFile } from 'node:fs/promises'
+import { join } from 'node:path'
 
 export const alt = 'Universo Hostelería — Mobiliario profesional para hostelería'
 export const size = { width: 1200, height: 630 }
@@ -6,6 +8,11 @@ export const contentType = 'image/png'
 
 // Imagem OpenGraph default (home, catálogo e cualquier página sin OG propia).
 export default async function OpengraphImage() {
+  const logo = await readFile(join(process.cwd(), 'public/logo.png'))
+  // logo.png na verdade é JPEG (header FFD8); detecta o MIME real pelos magic bytes.
+  const logoMime = logo[0] === 0x89 && logo[1] === 0x50 ? 'image/png' : 'image/jpeg'
+  const logoSrc = `data:${logoMime};base64,${logo.toString('base64')}`
+
   return new ImageResponse(
     (
       <div
@@ -24,18 +31,17 @@ export default async function OpengraphImage() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
           <div
             style={{
-              width: 56,
-              height: 56,
-              borderRadius: 14,
-              background: '#2f6df6',
+              width: 64,
+              height: 64,
+              borderRadius: 16,
+              background: '#fff',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: 30,
-              fontWeight: 800,
             }}
           >
-            U
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={logoSrc} width={46} height={46} alt="" style={{ objectFit: 'contain' }} />
           </div>
           <div style={{ fontSize: 30, fontWeight: 700, letterSpacing: -0.5 }}>Universo Hostelería</div>
         </div>
