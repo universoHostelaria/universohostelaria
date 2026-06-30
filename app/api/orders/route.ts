@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { randomUUID } from 'crypto'
 
 // Use service key server-side so we can bypass RLS for reading
 const supabase = createClient(
@@ -35,10 +36,15 @@ export async function POST(req: NextRequest) {
       0
     )
 
-    // Save to Supabase
-    const { data, error } = await supabase
+    // Generate ID manually — avoids needing a SELECT policy for anon
+    // (Supabase does INSERT ... RETURNING by default, which requires SELECT permission)
+    const orderId = randomUUID()
+
+    // Save to Supabase — no .select() to avoid RLS SELECT requirement
+    const { error } = await supabase
       .from('orders')
       .insert({
+        id: orderId,
         empresa_nombre,
         empresa_cif,
         empresa_direccion,
@@ -52,8 +58,6 @@ export async function POST(req: NextRequest) {
         notas,
         status: 'pending',
       })
-      .select()
-      .single()
 
     if (error) {
       console.error('Supabase error:', error)
@@ -92,7 +96,7 @@ ${total_estimado > 0 ? `TOTAL ESTIMADO: ${total_estimado.toFixed(2)} € + IVA` 
 
 ${notas ? `NOTAS: ${notas}` : ''}
 
-ID Solicitud: ${data.id}
+ID Solicitud: ${orderId}
 Fecha: ${new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })}
 
 ---
@@ -160,7 +164,7 @@ Ver todas las solicitudes en el dashboard de Supabase.
     </div>` : ''}
 
     <div style="border-top:1px solid #E8E8E8;padding-top:16px;font-size:12px;color:#AAAAAA">
-      Ref. solicitud: <strong style="color:#0D0D0D">${data.id.slice(0,8).toUpperCase()}</strong><br/>
+      Ref. solicitud: <strong style="color:#0D0D0D">${orderId.slice(0,8).toUpperCase()}</strong><br/>
       ${new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })}
     </div>
   </div>
@@ -195,7 +199,7 @@ Ver todas las solicitudes en el dashboard de Supabase.
       }
     }
 
-    return NextResponse.json({ success: true, id: data.id })
+    return NextResponse.json({ success: true, id: orderId })
 
   } catch (err) {
     console.error('Order API error:', err)
