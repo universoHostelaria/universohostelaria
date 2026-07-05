@@ -14,7 +14,8 @@ export default function FeaturedProducts() {
       .eq('active', true)
       .not('img_url', 'is', null)
       .order('is_new', { ascending: false })
-      .limit(4)
+      .order('name')
+      .limit(15)
       .then(({ data }) => setProducts(data || []))
   }, [])
 
@@ -23,7 +24,7 @@ export default function FeaturedProducts() {
   return (
     <div style={{
       display: 'grid',
-      gridTemplateColumns: 'repeat(4, 1fr)',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
       gap: '16px',
     }}>
       {products.map(p => <ProductCard key={p.id} product={p} />)}
