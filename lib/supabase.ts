@@ -27,6 +27,8 @@ export type Product = {
   modelo:           string | null
   source:           string | null
   active:           boolean
+  images:           string[] | null
+  hidden_by_campaign: boolean | null
   created_at:       string
 }
 

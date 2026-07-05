@@ -113,3 +113,28 @@ export async function deleteProduct(id: string) {
   revalidatePath('/admin/products')
   revalidatePath('/catalog')
 }
+
+// ── Modo campaña ────────────────────────────────────────────────
+// Cuántos productos están ocultos por la campaña (para el botón).
+export async function countHiddenByCampaign() {
+  const supabase = createClient()
+  const { count } = await supabase
+    .from('products')
+    .select('*', { count: 'exact', head: true })
+    .eq('hidden_by_campaign', true)
+  return count ?? 0
+}
+
+// Restaura el catálogo completo: reactiva todo lo ocultado por la campaña.
+export async function restoreFullCatalog() {
+  const supabase = createClient()
+  const { error } = await supabase
+    .from('products')
+    .update({ active: true, hidden_by_campaign: false })
+    .eq('hidden_by_campaign', true)
+  if (error) throw new Error(error.message)
+  revalidatePath('/admin/products')
+  revalidatePath('/catalog')
+  revalidatePath('/')
+  return { ok: true }
+}

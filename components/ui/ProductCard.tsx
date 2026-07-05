@@ -14,7 +14,8 @@ export default function ProductCard({ product: p, view = 'grid' }: Props) {
 
   const supplierName =
     p.supplier_id === 'tilia_romero' ? 'Tilia · Romero' :
-    p.supplier_id === 'arkimueble'   ? 'Arkimueble' : 'Romero'
+    p.supplier_id === 'arkimueble'   ? 'Arkimueble' :
+    p.supplier_id === 'romero'       ? 'Romero' : 'Universo Hostelería'
 
   return (
     <>

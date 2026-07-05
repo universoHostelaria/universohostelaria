@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase-server'
 import ProductRowActions from './ProductRowActions'
+import RestoreCampaignButton from './RestoreCampaignButton'
+import { countHiddenByCampaign } from './actions'
 
 const PER_PAGE = 30
 
@@ -21,7 +23,7 @@ export default async function ProductsPage({
   if (q) query = query.or(`name.ilike.%${q}%,id.ilike.%${q}%,category.ilike.%${q}%`)
 
   query = query.range((page - 1) * PER_PAGE, page * PER_PAGE - 1)
-  const { data: products, count } = await query
+  const [{ data: products, count }, hiddenCount] = await Promise.all([query, countHiddenByCampaign()])
 
   const total = count ?? 0
   const pages = Math.max(1, Math.ceil(total / PER_PAGE))
@@ -43,6 +45,8 @@ export default async function ProductsPage({
         </div>
         <Link href="/admin/products/new" className="adm-btn">+ Nuevo producto</Link>
       </div>
+
+      <RestoreCampaignButton hiddenCount={hiddenCount} />
 
       <form className="adm-toolbar" action="/admin/products" method="get">
         <input name="q" className="adm-input" placeholder="Buscar por nombre, ID o categoría…" defaultValue={q} />

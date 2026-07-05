@@ -2,11 +2,11 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
-import Image from 'next/image'
 import Link from 'next/link'
 import { supabase, getProduct, getRelatedProducts } from '@/lib/supabase'
 import ProductCard from '@/components/ui/ProductCard'
 import ProductActions from '@/components/ui/ProductActions'
+import ProductGallery from './ProductGallery'
 import { SITE_URL, supplierName as supplierLabel } from '@/lib/seo'
 import styles from './product.module.css'
 
@@ -78,7 +78,8 @@ export default async function ProductPage({ params }: Props) {
 
   const supplierName =
     product.supplier_id === 'tilia_romero' ? 'Tilia · Romero' :
-    product.supplier_id === 'arkimueble'   ? 'Arkimueble' : 'Romero'
+    product.supplier_id === 'arkimueble'   ? 'Arkimueble' :
+    product.supplier_id === 'romero'       ? 'Romero' : 'Universo Hostelería'
 
   const specs = [
     { key: 'Dimensiones', val: product.dimensions_raw, sub: 'Alto × Ancho × Profundo (cm)' },
@@ -91,12 +92,19 @@ export default async function ProductPage({ params }: Props) {
     product.modelo ? { key: 'Modelo', val: product.modelo, sub: '' } : null,
   ].filter(Boolean) as {key:string;val:string|null;sub:string}[]
 
+  const galleryImages =
+    product.images && product.images.length
+      ? product.images
+      : product.img_url
+        ? [product.img_url]
+        : []
+
   const productUrl = `${SITE_URL}/product/${product.id}`
   const productJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: product.name,
-    image: product.img_url ? [product.img_url] : undefined,
+    image: galleryImages.length ? galleryImages : undefined,
     description: productDescription(product),
     category: product.category ?? undefined,
     sku: product.cod_interno ?? product.id,
@@ -146,29 +154,15 @@ export default async function ProductPage({ params }: Props) {
       <div className={styles.productWrap}>
 
         {/* Gallery */}
-        <div className={styles.gallery}>
-          <div className={styles.mainImg}>
-            {product.img_url ? (
-              <Image src={product.img_url} alt={product.name} fill
-                sizes="(max-width:768px) 100vw, 55vw"
-                className={styles.mainImgEl} priority />
-            ) : (
-              <div className={styles.imgPlaceholder}>
-                <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-                  <rect x="10" y="15" width="60" height="40" rx="6" stroke="#CCCCCC" strokeWidth="2"/>
-                  <path d="M10 55h60" stroke="#CCCCCC" strokeWidth="2"/>
-                  <rect x="28" y="55" width="8" height="14" rx="3" fill="#CCCCCC"/>
-                  <rect x="44" y="55" width="8" height="14" rx="3" fill="#CCCCCC"/>
-                </svg>
-              </div>
-            )}
-            <div className={styles.badges}>
-              {product.is_new && <span className="badge badge-black">Nuevo</span>}
-              {product.uso === 'Exterior' && <span className="badge badge-green">Outdoor</span>}
-              {product.catas_certified && <span className="badge badge-blue">CATAS</span>}
-            </div>
-          </div>
-        </div>
+        <ProductGallery
+          images={galleryImages}
+          name={product.name}
+          badges={[
+            ...(product.is_new ? [{ label: 'Nuevo', cls: 'badge-black' }] : []),
+            ...(product.uso === 'Exterior' ? [{ label: 'Outdoor', cls: 'badge-green' }] : []),
+            ...(product.catas_certified ? [{ label: 'CATAS', cls: 'badge-blue' }] : []),
+          ]}
+        />
 
         {/* Info panel */}
         <div className={styles.infoPanel}>
