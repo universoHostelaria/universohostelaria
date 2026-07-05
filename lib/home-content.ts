@@ -105,7 +105,7 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
       { n: '04', name: 'EXTERIOR', count: '+320 referencias', href: '/catalog?uso=Exterior' },
       { n: '05', name: 'SILLONES', count: '+150 referencias', href: '/catalog?category=Sillones' },
       { n: '06', name: 'SOMBRILLAS', count: '+90 referencias', href: '/catalog?category=Sombrillas' },
-      { n: '07', name: 'LOUNGE', count: '+200 referencias', href: '/catalog?category=Sofás' },
+      { n: '07', name: 'LOUNGE', count: '+170 referencias', href: '/catalog?category=Sillones' },
       { n: '10K+', name: 'VER TODO', count: 'Todo el catálogo', href: '/catalog' },
     ],
   },
@@ -193,7 +193,7 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
           { label: 'Mesas', href: '/catalog?category=Mesas' },
           { label: 'Taburetes', href: '/catalog?category=Taburetes' },
           { label: 'Exterior', href: '/catalog?uso=Exterior' },
-          { label: 'Lounge', href: '/catalog?category=Sofás' },
+          { label: 'Lounge', href: '/catalog?category=Sillones' },
         ],
       },
       {

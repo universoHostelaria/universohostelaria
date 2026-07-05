@@ -1,5 +1,6 @@
 'use client'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import type { Product } from '@/lib/supabase'
@@ -17,17 +18,28 @@ export default function CatalogClient({ filterOptions }: { filterOptions: Filter
   const [loading, setLoading]   = useState(true)
   const [view, setView]         = useState<4|2|'list'>(4)
 
-  // Filters
-  const [selCat,  setSelCat]  = useState<string[]>([])
-  const [selUso,  setSelUso]  = useState<string[]>([])
+  // Filtros — inicializados a partir de los parámetros de la URL
+  // (p.ej. /catalog?category=Sillas&uso=Exterior desde el menú/home).
+  const searchParams = useSearchParams()
+  const [selCat,  setSelCat]  = useState<string[]>(() => {
+    const v = searchParams.get('category'); return v ? [v] : []
+  })
+  const [selUso,  setSelUso]  = useState<string[]>(() => {
+    const v = searchParams.get('uso'); return v ? [v] : []
+  })
   const [selMat,  setSelMat]  = useState<string[]>([])
   const [isNew,   setIsNew]   = useState(false)
   const [priceMax,setPriceMax]= useState<number|null>(null)
-  const [search,  setSearch]  = useState('')
+  const [search,  setSearch]  = useState(() => searchParams.get('search') ?? searchParams.get('q') ?? '')
   const [sort,    setSort]    = useState('name')
   const [openDD,  setOpenDD]  = useState<string|null>(null)
 
+  // Guarda contra respuestas fuera de orden: solo la última consulta
+  // puede actualizar el estado (evita ver productos de un filtro anterior).
+  const reqId = useRef(0)
+
   const fetchProducts = useCallback(async () => {
+    const myId = ++reqId.current
     setLoading(true)
     let q = supabase.from('products').select('*', { count: 'exact' }).eq('active', true).not('img_url', 'is', null)
     if (selCat.length)  q = q.in('category', selCat)
@@ -43,6 +55,7 @@ export default function CatalogClient({ filterOptions }: { filterOptions: Filter
 
     q = q.range((page-1)*PER_PAGE, page*PER_PAGE-1)
     const { data, count } = await q
+    if (myId !== reqId.current) return   // llegó una consulta más nueva: descartamos esta
     setProducts(data || [])
     setTotal(count || 0)
     setLoading(false)
