@@ -65,6 +65,7 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
       { label: 'Sillas & Taburetes', href: '/catalog?category=Sillas' },
       { label: 'Mesas', href: '/catalog?category=Mesas' },
       { label: 'Exterior', href: '/catalog?uso=Exterior' },
+      { label: 'Blog', href: '/blog' },
     ],
     searchText: 'Buscar en 10.000+ productos…',
     ctaLabel: 'Reservar cita',
@@ -202,7 +203,7 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
           { label: 'Sobre nosotros', href: '/#especialista' },
           { label: 'Fabricantes', href: '/catalog' },
           { label: 'Cómo funciona', href: '/#como-funciona' },
-          { label: 'Blog', href: '/' },
+          { label: 'Blog', href: '/blog' },
         ],
       },
       {

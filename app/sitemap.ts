@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { supabase } from '@/lib/supabase'
 import { SITE_URL } from '@/lib/seo'
+import { getPublishedPosts } from '@/lib/blog'
 
 export const revalidate = 3600
 
@@ -28,6 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPages: MetadataRoute.Sitemap = [
     { url: `${SITE_URL}/`, lastModified: now, changeFrequency: 'weekly', priority: 1 },
     { url: `${SITE_URL}/catalog`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
+    { url: `${SITE_URL}/blog`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
   ]
 
   const products = await getAllActiveProducts()
@@ -38,5 +40,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
-  return [...staticPages, ...productPages]
+  const posts = await getPublishedPosts()
+  const postPages: MetadataRoute.Sitemap = posts.map((p) => ({
+    url: `${SITE_URL}/blog/${p.slug}`,
+    lastModified: p.updated_at ? new Date(p.updated_at) : now,
+    changeFrequency: 'monthly',
+    priority: 0.75,
+  }))
+
+  return [...staticPages, ...productPages, ...postPages]
 }
