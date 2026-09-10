@@ -170,6 +170,8 @@ export default async function ProductPage({ params }: Props) {
           <h1 className={styles.productTitle}>{product.name}</h1>
           {product.cod_interno && <div className={styles.ref}>Ref. {product.cod_interno}</div>}
 
+          {product.features && <p className={styles.desc}>{product.features}</p>}
+
           {/* CTAs */}
           <ProductActions product={product} />
         </div>
