@@ -2,7 +2,7 @@
 // Configuração central de SEO (setor: mobiliario de hostelería).
 // ─────────────────────────────────────────────────────────────
 
-export const SITE_URL = 'https://universohostelaria.es'
+export const SITE_URL = 'https://universohosteleria.es'
 export const SITE_NAME = 'Universo Hostelería'
 export const SITE_LOCALE = 'es_ES'
 
