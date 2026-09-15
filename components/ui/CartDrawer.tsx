@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { useCart } from './CartContext'
 import SolicitudModal from './SolicitudModal'
+import { priceConIva, formatEUR, IVA } from '@/lib/price'
 import styles from './CartDrawer.module.css'
 
 const WA = 'https://wa.me/34665953186?text=Hola%2C%20me%20gustar%C3%ADa%20hablar%20con%20un%20especialista%20de%20Universo%20Hostelería.'
@@ -69,10 +70,10 @@ export default function CartDrawer() {
                 <div className={styles.itemInfo}>
                   <div className={styles.itemSupplier}>{supplierName(item.product.supplier_id)}</div>
                   <div className={styles.itemName}>{item.product.name}</div>
-                  {item.product.price ? (
+                  {priceConIva(item.product.price) ? (
                     <div className={styles.itemPrice}>
-                      {(item.product.price * item.quantity).toFixed(2).replace('.', ',')} €{' '}
-                      <span>+ IVA</span>
+                      {formatEUR(priceConIva(item.product.price)! * item.quantity)}{' '}
+                      <span>IVA incl.</span>
                     </div>
                   ) : (
                     <div className={styles.itemPrice}>Precio a consultar</div>
@@ -102,7 +103,7 @@ export default function CartDrawer() {
               <div className={styles.totalRow}>
                 <span>Total estimado</span>
                 <span className={styles.totalVal}>
-                  {total.toFixed(2).replace('.', ',')} € <small>+ IVA</small>
+                  {formatEUR(total * (1 + IVA))} <small>IVA incl.</small>
                 </span>
               </div>
             )}

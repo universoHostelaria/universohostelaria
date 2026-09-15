@@ -3,6 +3,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import type { Product } from '@/lib/supabase'
+import { priceConIva, formatEUR } from '@/lib/price'
 import AddToCartModal from './AddToCartModal'
 import styles from './ProductCard.module.css'
 
@@ -47,8 +48,8 @@ export default function ProductCard({ product: p, view = 'grid' }: Props) {
           <div className={styles.dims}>{isListView ? `${p.category} · ${p.material} · ${p.dimensions_raw || '—'}` : (p.dimensions_raw || p.category)}</div>
           <div className={styles.footer}>
             <div>
-              <div className={styles.price}>{p.price_display}</div>
-              <div className={styles.priceNote}>+ IVA</div>
+              <div className={styles.price}>{priceConIva(p.price) ? formatEUR(priceConIva(p.price)!) : p.price_display}</div>
+              <div className={styles.priceNote}>{priceConIva(p.price) ? 'IVA incluido' : ''}</div>
             </div>
             <button className={styles.addBtn}
               onClick={e => { e.preventDefault(); e.stopPropagation(); setShowModal(true) }}

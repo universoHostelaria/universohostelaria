@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { useCart } from './CartContext'
 import type { Product } from '@/lib/supabase'
+import { priceConIva, formatEUR } from '@/lib/price'
 import styles from './ProductActions.module.css'
 
 type Props = { product: Product }
@@ -13,6 +14,7 @@ export default function ProductActions({ product: p }: Props) {
   const [added, setAdded] = useState(false)
 
   const unitPrice = p.price
+  const unitConIva = priceConIva(p.price)
 
   const handleAdd = () => {
     const productWithColor = color
@@ -37,9 +39,9 @@ export default function ProductActions({ product: p }: Props) {
           />
           <button onClick={() => setQty(q => q + 1)}>+</button>
         </div>
-        {unitPrice && qty > 0 && (
+        {unitConIva && qty > 0 && (
           <span className={styles.subtotal}>
-            = {(unitPrice * qty).toFixed(2).replace('.', ',')} € <small>+ IVA</small>
+            = {formatEUR(unitConIva * qty)} <small>IVA incl.</small>
           </span>
         )}
       </div>
@@ -57,8 +59,10 @@ export default function ProductActions({ product: p }: Props) {
 
       {/* Price */}
       <div className={styles.priceBlock}>
-        <div className={styles.price}>{p.price_display}</div>
-        <div className={styles.priceNote}>Precio mayorista · IVA no incluido</div>
+        <div className={styles.price}>{unitConIva ? formatEUR(unitConIva) : p.price_display}</div>
+        <div className={styles.priceNote}>
+          {unitConIva ? `IVA incluido · ${formatEUR(unitPrice!)} sin IVA` : 'Consultar precio · IVA aparte'}
+        </div>
       </div>
 
       {/* CTA — single button */}

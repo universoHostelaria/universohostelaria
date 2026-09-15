@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { useCart } from './CartContext'
 import type { CartItem } from './CartContext'
+import { priceConIva, formatEUR, IVA } from '@/lib/price'
 import styles from './SolicitudModal.module.css'
 
 type Props = { onClose: () => void }
@@ -185,17 +186,17 @@ export default function SolicitudModal({ onClose }: Props) {
                     <div className={styles.confirmQty}>{i.quantity} ud</div>
                   </div>
                   <div className={styles.confirmPrice}>
-                    {i.product.price
-                      ? `${(i.product.price * i.quantity).toFixed(2).replace('.', ',')} €`
+                    {priceConIva(i.product.price)
+                      ? formatEUR(priceConIva(i.product.price)! * i.quantity)
                       : 'A consultar'}
-                    <small>+IVA</small>
+                    <small>IVA incl.</small>
                   </div>
                 </div>
               ))}
               {total > 0 && (
                 <div className={styles.confirmTotal}>
                   <span>Total estimado</span>
-                  <strong>{total.toFixed(2).replace('.', ',')} € <small>+ IVA</small></strong>
+                  <strong>{formatEUR(total * (1 + IVA))} <small>IVA incl.</small></strong>
                 </div>
               )}
             </div>

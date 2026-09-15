@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { useCart } from './CartContext'
 import type { Product } from '@/lib/supabase'
+import { priceConIva, formatEUR } from '@/lib/price'
 import styles from './AddToCart.module.css'
 
 type Props = { product: Product; onClose: () => void }
@@ -19,8 +20,8 @@ export default function AddToCartModal({ product: p, onClose }: Props) {
     onClose()
   }
 
-  const unitPrice = p.price
-  const totalPrice = unitPrice ? unitPrice * qty : null
+  const unitConIva = priceConIva(p.price)
+  const totalConIva = unitConIva ? unitConIva * qty : null
 
   return (
     <>
@@ -48,8 +49,8 @@ export default function AddToCartModal({ product: p, onClose }: Props) {
         <div className={styles.priceRow}>
           <span className={styles.priceLabel}>Precio unitario</span>
           <span className={styles.priceVal}>
-            {unitPrice ? `${unitPrice.toFixed(2).replace('.', ',')} €` : 'A consultar'}
-            {unitPrice && <small> + IVA</small>}
+            {unitConIva ? formatEUR(unitConIva) : 'A consultar'}
+            {unitConIva && <small> IVA incl.</small>}
           </span>
         </div>
 
@@ -67,10 +68,10 @@ export default function AddToCartModal({ product: p, onClose }: Props) {
           </div>
         </div>
 
-        {totalPrice !== null && qty > 1 && (
+        {totalConIva !== null && qty > 1 && (
           <div className={styles.totalRow}>
             <span>Total ({qty} ud)</span>
-            <span className={styles.totalVal}>{totalPrice.toFixed(2).replace('.', ',')} € <small>+ IVA</small></span>
+            <span className={styles.totalVal}>{formatEUR(totalConIva)} <small>IVA incl.</small></span>
           </div>
         )}
 
