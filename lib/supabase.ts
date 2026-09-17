@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import type { VariantGrid } from '@/lib/variants'
 
 const supabaseUrl  = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseAnon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -29,6 +30,7 @@ export type Product = {
   active:           boolean
   images:           string[] | null
   hidden_by_campaign: boolean | null
+  variants:         VariantGrid | null
   created_at:       string
 }
 

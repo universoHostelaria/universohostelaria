@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import type { Product } from '@/lib/supabase'
+import { gridToCsv, getVariants, normalizeGrid } from '@/lib/variants'
 
 type Supplier = { id: string; name: string }
 
@@ -14,6 +15,9 @@ type Props = {
 
 export default function ProductForm({ product, suppliers, action }: Props) {
   const isEdit = !!product
+  const grid = product ? (normalizeGrid(product.variants) ?? getVariants(product.id)) : null
+  const variantsCsv = grid ? gridToCsv(grid) : ''
+  const variantsNote = grid?.note ?? ''
   const [preview, setPreview] = useState<string | null>(product?.img_url ?? null)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
@@ -175,6 +179,29 @@ export default function ProductForm({ product, suppliers, action }: Props) {
               <input type="checkbox" name="catas_certified" defaultChecked={product?.catas_certified ?? false} /> Certificado CATAS
             </label>
           </div>
+        </div>
+      </div>
+      {/* Variantes: tabla acabado × medida → precio (opcional) */}
+      <div className="adm-card" style={{ marginTop: 24 }}>
+        <h2 style={{ fontSize: 15, margin: '0 0 6px' }}>Variantes — tabla de precios (opcional)</h2>
+        <p className="adm-muted" style={{ fontSize: 12.5, margin: '0 0 12px' }}>
+          Para productos con varios acabados y medidas (p. ej. mesas). Primera fila = acabados; cada fila
+          siguiente = medida y precios <b>sin IVA</b> (pon <code>-</code> si no existe). La web muestra el precio
+          final con IVA y una tabla interactiva. Déjalo vacío si el producto no tiene variantes.
+        </p>
+        <div className="adm-field">
+          <label>Tabla (formato tarifa: Medida, Acabado 1, Acabado 2…)</label>
+          <textarea
+            name="variants_csv"
+            className="adm-textarea"
+            style={{ minHeight: 190, fontFamily: 'ui-monospace, Menlo, monospace', fontSize: 12.5 }}
+            defaultValue={variantsCsv}
+            placeholder={'Medida, Melamina, Werzalit, Compact B.\n60×60, 116, 164, 179\n70×70, 125, 185, 198'}
+          />
+        </div>
+        <div className="adm-field" style={{ margin: 0 }}>
+          <label>Nota (bases, pintura, etc.)</label>
+          <input name="variants_note" className="adm-input" defaultValue={variantsNote} />
         </div>
       </div>
     </form>

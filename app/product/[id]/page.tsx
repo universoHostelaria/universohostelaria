@@ -7,6 +7,8 @@ import { supabase, getProduct, getRelatedProducts } from '@/lib/supabase'
 import ProductCard from '@/components/ui/ProductCard'
 import ProductActions from '@/components/ui/ProductActions'
 import ProductGallery from './ProductGallery'
+import ProductVariants from '@/components/ui/ProductVariants'
+import { getVariants, normalizeGrid } from '@/lib/variants'
 import { SITE_URL, supplierName as supplierLabel } from '@/lib/seo'
 import styles from './product.module.css'
 
@@ -99,6 +101,7 @@ export default async function ProductPage({ params }: Props) {
         ? [product.img_url]
         : []
 
+  const variants = normalizeGrid(product.variants) ?? getVariants(product.id)
   const productUrl = `${SITE_URL}/product/${product.id}`
   const productJsonLd = {
     '@context': 'https://schema.org',
@@ -176,6 +179,8 @@ export default async function ProductPage({ params }: Props) {
           <ProductActions product={product} />
         </div>
       </div>
+
+      {variants && <ProductVariants variants={variants} />}
 
       {/* Specs */}
       <div className={styles.specsWrap}>

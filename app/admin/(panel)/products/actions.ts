@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
+import { csvToGrid } from '@/lib/variants'
 
 const BUCKET = 'product-images'
 
@@ -42,6 +43,10 @@ function readFields(fd: FormData) {
   row.active = fd.get('active') === 'on'
   const img = fd.get('img_url')
   if (img) row.img_url = String(img)
+  // Variantes (tabla CSV del CMS) -> jsonb; vacío = sin variantes
+  const vcsv = String(fd.get('variants_csv') || '').trim()
+  const vnote = String(fd.get('variants_note') || '').trim()
+  row.variants = vcsv ? csvToGrid(vcsv, vnote || undefined) : null
   return row
 }
 

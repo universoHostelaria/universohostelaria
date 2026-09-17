@@ -1,0 +1,65 @@
+.wrap { max-width: 1360px; margin: 0 auto; padding: 0 32px 72px; }
+
+.title {
+  font-family: 'Bebas Neue', sans-serif; font-size: clamp(34px, 3.4vw, 46px);
+  letter-spacing: .02em; line-height: .96; color: #0D0D0D; margin: 0 0 24px;
+}
+.title span { color: #2B6FD4; }
+
+/* Resumen de selección */
+.selected {
+  display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+  background: #0D0D0D; color: #fff; border-radius: 16px; padding: 20px 26px; margin-bottom: 22px;
+}
+.selLeft { display: flex; flex-direction: column; gap: 4px; }
+.selLabel { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.5); }
+.selCombo { font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: .02em; line-height: 1; }
+.selCombo i { font-style: normal; color: #2B6FD4; margin: 0 6px; }
+.selRight { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+.selPrice { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: .02em; line-height: 1; }
+.selNote { font-size: 12px; color: rgba(255,255,255,.55); }
+
+/* Leyenda de acabados (chips) */
+.legend { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+.chip {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
+  background: #fff; border: 1.5px solid #E8E8E8; border-radius: 12px; padding: 10px 16px;
+  cursor: pointer; text-align: left; transition: border-color .18s, transform .18s, box-shadow .18s;
+}
+.chip:hover { transform: translateY(-2px); border-color: #cfcfcf; }
+.chipOn { border-color: #2B6FD4; box-shadow: 0 0 0 3px rgba(43,111,212,.14); }
+.chipName { font-family: 'Bebas Neue', sans-serif; font-size: 17px; letter-spacing: .04em; color: #0D0D0D; line-height: 1; }
+.chipDesc { font-size: 11.5px; color: #8a8a8a; }
+
+/* Matriz */
+.tableWrap { overflow-x: auto; border: 1.5px solid #E8E8E8; border-radius: 16px; background: #fff; }
+.table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 640px; }
+.table th {
+  font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: .06em; color: #555;
+  padding: 14px 12px; text-align: center; border-bottom: 1.5px solid #E8E8E8; background: #FAFAF8;
+  transition: color .18s, background .18s;
+}
+.thSize { text-align: left !important; padding-left: 20px !important; }
+.thOn { color: #2B6FD4 !important; background: #EAF1FB !important; }
+.table td { padding: 8px 10px; border-bottom: 1px solid #F0F0EE; text-align: center; }
+.table tr:last-child td { border-bottom: none; }
+.tdSize { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: .04em; color: #0D0D0D; text-align: left !important; padding-left: 20px !important; white-space: nowrap; }
+.rowOn .tdSize { color: #2B6FD4; }
+.td { vertical-align: middle; }
+.cell {
+  width: 100%; border: 1.5px solid transparent; background: transparent; border-radius: 10px;
+  padding: 10px 8px; font-size: 14px; font-weight: 600; color: #0D0D0D; cursor: pointer;
+  font-variant-numeric: tabular-nums; transition: background .15s, border-color .15s, color .15s, transform .15s;
+}
+.cell:hover { background: #F2F6FD; border-color: #cfe0fb; transform: translateY(-1px); }
+.cellOn { background: #2B6FD4 !important; color: #fff !important; border-color: #2B6FD4 !important; box-shadow: 0 6px 18px rgba(43,111,212,.28); }
+.na { color: #C8C8C8; font-size: 14px; }
+
+.note { font-size: 12.5px; color: #8a8a8a; margin: 14px 4px 0; line-height: 1.5; }
+
+@media (max-width: 640px) {
+  .wrap { padding-left: 20px; padding-right: 20px; }
+  .selected { padding: 16px 18px; }
+  .selCombo { font-size: 24px; }
+  .selPrice { font-size: 28px; }
+}
