@@ -50,6 +50,11 @@ function readFields(fd: FormData) {
   return row
 }
 
+// Si la columna products.variants aún no existe (supabase/variants.sql), reintenta sin ella.
+function isMissingVariants(err: { code?: string; message?: string } | null) {
+  return !!err && (err.code === '42703' || err.code === 'PGRST204') && /variants/.test(err.message ?? '')
+}
+
 // Faz upload de uma imagem (File) e devolve a URL pública, ou null.
 async function uploadImage(supabase: ReturnType<typeof createClient>, file: File, id: string) {
   if (!file || file.size === 0) return null
@@ -76,7 +81,8 @@ export async function createProduct(fd: FormData) {
     row.img_url = await uploadImage(supabase, file, id)
   }
 
-  const { error } = await supabase.from('products').insert(row)
+  let { error } = await supabase.from('products').insert(row)
+  if (isMissingVariants(error)) { delete row.variants; ({ error } = await supabase.from('products').insert(row)) }
   if (error) throw new Error(error.message)
 
   revalidatePath('/admin/products')
@@ -93,7 +99,8 @@ export async function updateProduct(id: string, fd: FormData) {
     row.img_url = await uploadImage(supabase, file, id)
   }
 
-  const { error } = await supabase.from('products').update(row).eq('id', id)
+  let { error } = await supabase.from('products').update(row).eq('id', id)
+  if (isMissingVariants(error)) { delete row.variants; ({ error } = await supabase.from('products').update(row).eq('id', id)) }
   if (error) throw new Error(error.message)
 
   revalidatePath('/admin/products')
