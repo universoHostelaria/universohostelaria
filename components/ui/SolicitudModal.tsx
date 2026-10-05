@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { useCart } from './CartContext'
 import type { CartItem } from './CartContext'
 import { priceConIva, formatEUR, IVA } from '@/lib/price'
@@ -34,6 +35,7 @@ const supplierName = (id: string) =>
 
 export default function SolicitudModal({ onClose }: Props) {
   const { items, total, clearCart } = useCart()
+  const router = useRouter()
   const [step, setStep]     = useState<Step>('empresa')
   const [form, setForm]     = useState<FormData>(EMPTY)
   const [errors, setErrors] = useState<Partial<FormData>>({})
@@ -78,8 +80,11 @@ export default function SolicitudModal({ onClose }: Props) {
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Error')
       setOrderId(data.id)
-      setStep('enviado')
       clearCart()
+      // Página de confirmación (URL propia para medir la conversión en Google Ads)
+      const ref = String(data.id ?? '').replace(/[^a-zA-Z0-9]/g, '').slice(0, 8).toUpperCase()
+      onClose()
+      router.push(ref ? `/gracias?ref=${ref}` : '/gracias')
     } catch (err) {
       alert('Hubo un error al enviar tu solicitud. Por favor intenta de nuevo.')
     } finally {
