@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import styles from './gracias.module.css'
+import LeadEvent from './LeadEvent'
 
 export const metadata: Metadata = {
   title: 'Solicitud enviada',
@@ -18,6 +19,7 @@ export default function GraciasPage({ searchParams }: Props) {
 
   return (
     <>
+      <LeadEvent refId={ref ?? null} />
       <Navbar />
       <main className={styles.wrap}>
         <div className={styles.icon}>

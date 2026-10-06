@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { CartProvider } from '@/components/ui/CartContext'
 import SiteChrome from '@/components/ui/SiteChrome'
+import GoogleTag from '@/components/analytics/GoogleTag'
+import CookieBanner from '@/components/analytics/CookieBanner'
 import { SITE_URL, SITE_NAME, SITE_LOCALE, SECTOR_KEYWORDS, organizationJsonLd, websiteJsonLd } from '@/lib/seo'
 
 export const metadata: Metadata = {
@@ -56,10 +58,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body style={{ margin: 0, padding: 0, background: '#FFFFFF', colorScheme: 'light' }}>
+        <GoogleTag />
         <CartProvider>
           {children}
           <SiteChrome />
         </CartProvider>
+        <CookieBanner />
       </body>
     </html>
   )

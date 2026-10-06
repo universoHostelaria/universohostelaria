@@ -1,0 +1,7 @@
+.banner { position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 9000; margin: 0 auto; max-width: 720px; background: #0D0D0D; color: #fff; border-radius: 14px; padding: 16px 18px; display: flex; gap: 16px; align-items: center; justify-content: space-between; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+.text { margin: 0; font-size: 13px; line-height: 1.5; color: rgba(255,255,255,.75); font-weight: 300; }
+.actions { display: flex; gap: 8px; flex-shrink: 0; }
+.reject, .accept { font-family: 'Bebas Neue', sans-serif; letter-spacing: .06em; font-size: 15px; padding: 9px 16px; border-radius: 999px; cursor: pointer; border: 1px solid rgba(255,255,255,.3); background: transparent; color: #fff; }
+.accept { background: #2B6FD4; border-color: #2B6FD4; }
+.accept:hover { background: #1A4FA0; }
+@media (max-width: 600px) { .banner { flex-direction: column; align-items: stretch; } .actions { justify-content: flex-end; } }
