@@ -1,8 +1,7 @@
 // Google Ads (gtag.js) — ID de la etiqueta y helpers de eventos.
 export const GADS_ID = 'AW-18495865106'
 // Etiqueta de la acción de conversión "Enviar formulario de lead" (Google Ads → Conversiones → snippet de evento).
-// Opcional: sin ella se envía igualmente el evento estándar generate_lead.
-export const GADS_LEAD_LABEL = process.env.NEXT_PUBLIC_GADS_LEAD_LABEL ?? ''
+export const GADS_LEAD_LABEL = process.env.NEXT_PUBLIC_GADS_LEAD_LABEL ?? 'ARDJCI_4jZIdEJKCwvNE'
 
 export const CONSENT_KEY = 'uh_consent'
 
@@ -26,5 +25,5 @@ export function grantConsent() {
 // Lead enviado (página /gracias)
 export function trackLead(ref?: string | null) {
   gtag('event', 'generate_lead', { lead_ref: ref ?? undefined })
-  if (GADS_LEAD_LABEL) gtag('event', 'conversion', { send_to: `${GADS_ID}/${GADS_LEAD_LABEL}` })
+  if (GADS_LEAD_LABEL) gtag('event', 'conversion', { send_to: `${GADS_ID}/${GADS_LEAD_LABEL}`, value: 1.0, currency: 'BRL' })
 }
