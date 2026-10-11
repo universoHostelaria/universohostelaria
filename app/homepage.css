@@ -198,11 +198,17 @@ footer{background:var(--black)}
   .spec-wrap,.split{grid-template-columns:1fr}
   .spec-r{display:none}
   .ft{grid-template-columns:1fr 1fr}
+  /* Hero apilado: texto arriba y el sillón entero debajo, sin velo */
+  .hero{flex-direction:column;align-items:stretch;min-height:0}
+  .hero-body{order:1;max-width:640px;margin-left:0;padding:64px 32px 12px}
+  .hero-img-side{order:2;position:relative;width:100%;height:clamp(340px,62vw,560px);object-fit:cover;object-position:center 62%;-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 22%);mask-image:linear-gradient(to bottom,transparent 0,#000 22%)}
+  .hero-fade{display:none}
+  .hero-ctas,.hero-nums{margin-bottom:0}
+  .hero-ctas{margin-bottom:32px}
 }
 @media(max-width:640px){
-  .hero-body{max-width:100%;padding:56px 20px}
-  .hero-img-side{width:100%;opacity:.2}
-  .hero-fade{background:rgba(210,210,210,.7)}
+  .hero-body{padding:44px 20px 8px}
+  .hero-img-side{height:clamp(300px,82vw,420px)}
   h1{font-size:72px}
   .cat-grid{grid-template-columns:1fr 1fr}
   .prod-grid{grid-template-columns:1fr 1fr}

@@ -112,15 +112,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* TRUST */}
-      <div className="trust">
-        <div className="trust-w">
-          {c.trust.map((t, i) => (
-            <div className="ti" key={i}>{TRUST_ICONS[i] ?? TRUST_ICONS[0]}{t}</div>
-          ))}
-        </div>
-      </div>
-
       {/* SHOWCASE — un bloque por producto con foto ambientada */}
       <div id="catalogo" className="sec">
         <div className="sh">
@@ -132,6 +123,15 @@ export default async function HomePage() {
           <a href={c.showcase.ctaHref} className="btn btn-ol" style={{ flexShrink: '0' }}>{c.showcase.ctaLabel}</a>
         </div>
         <ProductShowcase entries={showcase} />
+      </div>
+
+      {/* TRUST */}
+      <div className="trust">
+        <div className="trust-w">
+          {c.trust.map((t, i) => (
+            <div className="ti" key={i}>{TRUST_ICONS[i] ?? TRUST_ICONS[0]}{t}</div>
+          ))}
+        </div>
       </div>
 
       {/* CATEGORIES (opcional, se activa desde el CMS) */}

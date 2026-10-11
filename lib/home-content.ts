@@ -121,8 +121,8 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
     ctaLabel: 'Ver catálogo completo',
     ctaHref: '/catalog',
     items: [
-      { productId: 'RM2254', image: 'https://obtockbxprbdvawkrhko.supabase.co/storage/v1/object/public/product-images/campaign/amb-agua-tortola.jpg', tagline: 'Apilable, ligera y en 5 colores. La silla que aguanta el ritmo de tu sala.' },
-      { productId: 'RM1825', image: 'https://obtockbxprbdvawkrhko.supabase.co/storage/v1/object/public/product-images/campaign/amb-agua-negro.jpg', tagline: 'Base de hierro y tablero a elegir: melamina, Werzalit o Compact. De Ø60 a 90×90 cm.' },
+      { productId: 'RM2254', image: 'https://obtockbxprbdvawkrhko.supabase.co/storage/v1/object/public/product-images/campaign/amb-agua-negro.jpg', tagline: 'Apilable, ligera y en 5 colores. La silla que aguanta el ritmo de tu sala.' },
+      { productId: 'RM1825', image: 'https://obtockbxprbdvawkrhko.supabase.co/storage/v1/object/public/product-images/campaign/amb-agua-tortola.jpg', tagline: 'Base de hierro y tablero a elegir: melamina, Werzalit o Compact. De Ø60 a 90×90 cm.' },
       { productId: 'RM1734', image: 'https://obtockbxprbdvawkrhko.supabase.co/storage/v1/object/public/product-images/campaign/amb-m1110.jpg', tagline: 'Polipropileno con fibra de vidrio y 8 colores. Hecha para el uso diario.' },
       { productId: 'sillon-lenox', image: 'https://obtockbxprbdvawkrhko.supabase.co/storage/v1/object/public/product-images/campaign/sillon-lenox-5.jpg', tagline: 'Madera maciza de Sungkay. Calidez natural para restaurantes y hoteles.' },
       { productId: 'AK0433', image: 'https://obtockbxprbdvawkrhko.supabase.co/storage/v1/object/public/product-images/campaign/sillon-berna-2.jpg', tagline: 'Trenzado y tapizado para interior y terraza. Confort de lounge.' },
