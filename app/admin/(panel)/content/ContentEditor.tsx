@@ -66,6 +66,10 @@ export default function ContentEditor({ initial }: { initial: HomeContent }) {
 
       {/* ANUNCIO */}
       <Section title="Barra de anuncio">
+        <label className="adm-check" style={{ marginBottom: 14 }}>
+          <input type="checkbox" checked={c.announcement.show} onChange={(e) => patch((d) => { d.announcement.show = e.target.checked })} />
+          Mostrar la barra negra encima del menú
+        </label>
         <Area label="Texto (admite HTML, ej. <strong>)" v={c.announcement.textHtml} on={(v) => patch((d) => { d.announcement.textHtml = v })} html />
         <Text label="Texto del enlace" v={c.announcement.linkLabel} on={(v) => patch((d) => { d.announcement.linkLabel = v })} />
       </Section>
