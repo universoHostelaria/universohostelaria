@@ -232,7 +232,7 @@ export default async function ProductPage({ params }: Props) {
               <rect x="2" y="4" width="12" height="10" rx="1.5" stroke="white" strokeWidth="1.4"/>
               <path d="M2 7h12M5 2v4M11 2v4" stroke="white" strokeWidth="1.4" strokeLinecap="round"/>
             </svg>
-            Reservar cita gratuita
+            Hablar con un especialista
           </Link>
         </div>
       </div>

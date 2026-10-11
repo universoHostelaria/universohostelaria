@@ -30,13 +30,6 @@ export default function Navbar() {
             </svg>
             <span>Buscar productos…</span>
           </Link>
-          <Link href="/#especialista" className="btn btn-dark" style={{fontSize:'13px',padding:'10px 18px'}}>
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-              <rect x="2" y="4" width="12" height="10" rx="1.5" stroke="white" strokeWidth="1.4"/>
-              <path d="M2 7h12M5 2v4M11 2v4" stroke="white" strokeWidth="1.4" strokeLinecap="round"/>
-            </svg>
-            Reservar cita
-          </Link>
         </div>
         <button className={styles.hamburger} onClick={() => setMenuOpen(!menuOpen)} aria-label="Abrir menú">
           <span/><span/><span/>
@@ -48,7 +41,6 @@ export default function Navbar() {
           <Link href="/catalog?category=Sillas" onClick={() => setMenuOpen(false)}>Sillas &amp; Taburetes</Link>
           <Link href="/catalog?category=Mesas" onClick={() => setMenuOpen(false)}>Mesas</Link>
           <Link href="/catalog?uso=Exterior" onClick={() => setMenuOpen(false)}>Exterior</Link>
-          <Link href="/#especialista" onClick={() => setMenuOpen(false)}>Reservar cita</Link>
         </div>
       )}
     </nav>

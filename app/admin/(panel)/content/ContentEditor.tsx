@@ -50,7 +50,6 @@ export default function ContentEditor({ initial }: { initial: HomeContent }) {
       {/* NAV */}
       <Section title="Navegación (menú superior)">
         <Text label="Texto del buscador" v={c.nav.searchText} on={(v) => patch((d) => { d.nav.searchText = v })} />
-        <Text label="Botón de cita" v={c.nav.ctaLabel} on={(v) => patch((d) => { d.nav.ctaLabel = v })} />
         <ArrEditor
           label="Enlaces del menú"
           items={c.nav.links}

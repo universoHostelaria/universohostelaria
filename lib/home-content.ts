@@ -19,7 +19,7 @@ export type HomeContent = {
   seo: { title: string; description: string }
   whatsappUrl: string
   logo: string
-  nav: { links: Link[]; searchText: string; ctaLabel: string }
+  nav: { links: Link[]; searchText: string }
   announcement: { textHtml: string; linkLabel: string }
   hero: {
     // 'studio': fondo blanco + producto recortado que se inclina con el ratón. 'photo': imagen lateral clásica.
@@ -73,7 +73,6 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
       { label: 'Blog', href: '/blog' },
     ],
     searchText: 'Buscar en 10.000+ productos…',
-    ctaLabel: 'Reservar cita',
   },
   announcement: {
     textHtml: '<strong>Nuevo:</strong> 15+ fabricantes, 10.000+ productos en un solo lugar',
@@ -172,14 +171,14 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
     image: '',
     tag: 'Servicio gratuito',
     titleHtml: 'TU PROYECTO.<br />NUESTRO <span class="blue">ESPECIALISTA.</span>',
-    text: '¿Abres un restaurante? ¿Renuevás la terraza? Reserva una cita y lo resolvemos juntos. Sin compromiso, sin letra pequeña.',
+    text: '¿Abres un restaurante? ¿Renuevás la terraza? Escríbenos y lo resolvemos juntos. Sin compromiso, sin letra pequeña.',
     features: [
       'Colores, materiales y acabados a medida',
       'Planificación de plazos y preparación del pedido',
       'Videollamada, teléfono o visita en Barcelona',
       '15 años de experiencia en proyectos de hostelería',
     ],
-    ctaLabel: 'Reservar cita gratuita',
+    ctaLabel: 'Hablar con un especialista',
   },
   break2Image: '',
   suppliers: {
@@ -231,7 +230,7 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
       {
         label: 'SOPORTE',
         links: [
-          { label: 'Cita con especialista', href: '/#especialista' },
+          { label: 'Hablar con un especialista', href: '/#especialista' },
           { label: 'Contacto', href: 'mailto:hola@universohosteleria.es' },
           { label: 'Envíos', href: '/#como-funciona' },
           { label: 'Aviso legal', href: '/' },

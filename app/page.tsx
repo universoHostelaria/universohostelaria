@@ -80,10 +80,6 @@ export default async function HomePage() {
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" strokeWidth="1.4"/><path d="M10 10L14 14" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/></svg>
               {c.nav.searchText}
             </div>
-            <a href={c.whatsappUrl} target="_blank" rel="noopener noreferrer" className="btn btn-dark" style={{ fontSize: '13px', padding: '10px 18px' }}>
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="10" rx="1.5" stroke="white" strokeWidth="1.4"/><path d="M2 7h12M5 2v4M11 2v4" stroke="white" strokeWidth="1.4" strokeLinecap="round"/></svg>
-              {c.nav.ctaLabel}
-            </a>
           </div>
         </div>
       </nav>
@@ -225,7 +221,7 @@ export default async function HomePage() {
               ))}
             </div>
             <a href={c.whatsappUrl} target="_blank" rel="noopener noreferrer" className="spec-btn">
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="10" rx="1.5" stroke="white" strokeWidth="1.4"/><path d="M2 7h12M5 2v4M11 2v4" stroke="white" strokeWidth="1.4" strokeLinecap="round"/></svg>
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2.5 3.5h11a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H7l-3 2.5v-2.5H2.5a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1z" stroke="white" strokeWidth="1.4" strokeLinejoin="round"/></svg>
               {c.specialist.ctaLabel}
             </a>
           </div>
