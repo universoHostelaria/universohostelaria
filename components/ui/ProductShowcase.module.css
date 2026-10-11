@@ -7,12 +7,13 @@
 .tile {
   position: relative;
   grid-column: span 2;
-  height: 460px;
+  height: 500px;
   border-radius: 18px;
   overflow: hidden;
   background: #1a1a1a;
   color: #fff;
   isolation: isolate;
+  container-type: inline-size;
 }
 .big { grid-column: span 3; height: 560px; }
 
@@ -69,14 +70,23 @@
 }
 @media (max-width: 960px) {
   .grid { grid-template-columns: repeat(2, 1fr); }
-  .tile, .big { grid-column: span 1; height: 480px; }
+  .tile, .big { grid-column: span 1; height: 540px; }
   .tile:last-child:nth-child(odd) { grid-column: span 2; }
 }
 @media (max-width: 640px) {
   .grid { grid-template-columns: 1fr; gap: 12px; }
-  .tile, .big, .tile:last-child:nth-child(odd) { grid-column: span 1; height: 440px; }
+  .tile, .big, .tile:last-child:nth-child(odd) { grid-column: span 1; height: 520px; }
   .body { padding: 20px 18px 18px; }
   .name, .big .name { font-size: 38px; }
   .tagline { font-size: 13.5px; margin-bottom: 14px; }
   .price { font-size: 30px; }
+}
+
+/* Card estrecho (móvil, tablet, columnas pequeñas): botones uno debajo del otro, a todo el ancho */
+@container (max-width: 400px) {
+  .foot { flex-direction: column; align-items: stretch; gap: 14px; }
+  .actions { flex-direction: column; align-items: stretch; width: 100%; gap: 8px; }
+  .add, .more { justify-content: center; width: 100%; padding: 11px 16px; }
+  .name { font-size: 36px; }
+  .tagline { margin-bottom: 14px; }
 }
