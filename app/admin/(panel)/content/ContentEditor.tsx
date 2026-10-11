@@ -109,6 +109,10 @@ export default function ContentEditor({ initial }: { initial: HomeContent }) {
 
       {/* CATEGORIES */}
       <Section title="Categorías">
+        <label className="adm-check" style={{ marginBottom: 14 }}>
+          <input type="checkbox" checked={c.categories.show} onChange={(e) => patch((d) => { d.categories.show = e.target.checked })} />
+          Mostrar esta sección en la home (debajo de la vitrina)
+        </label>
         <Row>
           <Text label="Eyebrow" v={c.categories.eyebrow} on={(v) => patch((d) => { d.categories.eyebrow = v })} />
           <Text label="Botón — texto" v={c.categories.ctaLabel} on={(v) => patch((d) => { d.categories.ctaLabel = v })} />
@@ -132,19 +136,36 @@ export default function ContentEditor({ initial }: { initial: HomeContent }) {
         />
       </Section>
 
-      {/* FEATURED */}
-      <Section title="Productos destacados (cabecera)">
+      {/* SHOWCASE */}
+      <Section title="Vitrina de productos (bloques con foto de fondo)">
         <Row>
-          <Text label="Eyebrow" v={c.featured.eyebrow} on={(v) => patch((d) => { d.featured.eyebrow = v })} />
-          <Text label="Botón — texto" v={c.featured.ctaLabel} on={(v) => patch((d) => { d.featured.ctaLabel = v })} />
+          <Text label="Eyebrow" v={c.showcase.eyebrow} on={(v) => patch((d) => { d.showcase.eyebrow = v })} />
+          <Text label="Botón — texto" v={c.showcase.ctaLabel} on={(v) => patch((d) => { d.showcase.ctaLabel = v })} />
         </Row>
-        <Area label="Título (HTML)" v={c.featured.titleHtml} on={(v) => patch((d) => { d.featured.titleHtml = v })} html />
-        <p className="adm-muted" style={{ fontSize: 12 }}>Los productos mostrados salen del catálogo (los marcados como destacados/nuevos con imagen).</p>
+        <Area label="Título (HTML)" v={c.showcase.titleHtml} on={(v) => patch((d) => { d.showcase.titleHtml = v })} html />
+        <Area label="Subtítulo" v={c.showcase.subtitle} on={(v) => patch((d) => { d.showcase.subtitle = v })} />
+        <p className="adm-muted" style={{ fontSize: 12 }}>
+          Nombre, precio y enlace salen del producto. Aquí eliges qué producto, la foto de fondo (mejor una foto
+          ambientada en un local) y una frase corta. Los dos primeros se muestran más grandes.
+        </p>
+        <ArrEditor
+          label="Productos de la vitrina (en este orden)"
+          items={c.showcase.items}
+          onAdd={() => patch((d) => { d.showcase.items.push({ productId: '', image: '', tagline: '' }) })}
+          onDel={(i) => patch((d) => { d.showcase.items.splice(i, 1) })}
+          render={(it, i) => (
+            <>
+              <Text label="ID del producto (ej: RM2254 — se ve en la URL de la ficha)" v={it.productId} on={(v) => patch((d) => { d.showcase.items[i].productId = v.trim() })} />
+              <Area label="Frase" v={it.tagline} on={(v) => patch((d) => { d.showcase.items[i].tagline = v })} />
+              <Img label="Foto de fondo" slot={`showcase-${i}`} v={it.image} on={(v) => patch((d) => { d.showcase.items[i].image = v })} />
+            </>
+          )}
+        />
       </Section>
 
       {/* IMAGE BREAKS */}
       <Section title="Imágenes de ancho completo">
-        <Img label="Imagen 1 (entre destacados y «por qué»)" slot="break1" v={c.break1Image} on={(v) => patch((d) => { d.break1Image = v })} />
+        <Img label="Imagen 1 (entre la vitrina y «por qué»)" slot="break1" v={c.break1Image} on={(v) => patch((d) => { d.break1Image = v })} />
         <Img label="Imagen 2 (tumbonas, antes de fabricantes)" slot="break2" v={c.break2Image} on={(v) => patch((d) => { d.break2Image = v })} />
       </Section>
 

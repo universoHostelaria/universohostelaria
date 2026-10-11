@@ -1,7 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import './homepage.css'
-import FeaturedProducts from '@/components/ui/FeaturedProducts'
+import ProductShowcase from '@/components/ui/ProductShowcase'
 import { getHomeContent } from '@/lib/home-content-server'
+import { supabase, type Product } from '@/lib/supabase'
 
 export const revalidate = 60
 
@@ -35,8 +36,21 @@ const CAT_ARROW = (
   <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
 )
 
+// Productos de la vitrina, en el orden definido en el CMS (solo activos).
+async function getShowcaseEntries(items: { productId: string; image: string; tagline: string }[]) {
+  const ids = items.map((i) => i.productId).filter(Boolean)
+  if (!ids.length) return []
+  const { data } = await supabase.from('products').select('*').in('id', ids).eq('active', true)
+  const byId = new Map((data as Product[] | null ?? []).map((p) => [p.id, p]))
+  return items.flatMap((item) => {
+    const product = byId.get(item.productId)
+    return product ? [{ item, product }] : []
+  })
+}
+
 export default async function HomePage() {
   const c = await getHomeContent()
+  const showcase = await getShowcaseEntries(c.showcase.items)
 
   return (
     <>
@@ -107,42 +121,44 @@ export default async function HomePage() {
         </div>
       </div>
 
-      {/* CATEGORIES */}
-      <div id="catalogo">
-        <div className="sec">
-          <div className="sh">
-            <div>
-              <div className="eyebrow">{c.categories.eyebrow}</div>
-              <h2 className="stitle" dangerouslySetInnerHTML={{ __html: c.categories.titleHtml }} />
-            </div>
-            <a href={c.categories.ctaHref} className="btn btn-ol" style={{ flexShrink: '0' }}>{c.categories.ctaLabel}</a>
-          </div>
-          <div className="cat-grid">
-            {c.categories.cards.map((card, i) => (
-              <a key={i} href={card.href} className={`cat-card${i === c.categories.cards.length - 1 ? ' cat-feat' : ''}`}>
-                <div className="cat-n">{card.n}</div>
-                <div className="cat-name">{card.name}</div>
-                <div className="cat-count">{card.count}</div>
-                <div className="cat-arr">{CAT_ARROW}</div>
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <hr className="div-line" />
-
-      {/* FEATURED */}
-      <div className="sec">
+      {/* SHOWCASE — un bloque por producto con foto ambientada */}
+      <div id="catalogo" className="sec">
         <div className="sh">
           <div>
-            <div className="eyebrow">{c.featured.eyebrow}</div>
-            <h2 className="stitle" dangerouslySetInnerHTML={{ __html: c.featured.titleHtml }} />
+            <div className="eyebrow">{c.showcase.eyebrow}</div>
+            <h2 className="stitle" dangerouslySetInnerHTML={{ __html: c.showcase.titleHtml }} />
+            {c.showcase.subtitle && <p className="sh-sub">{c.showcase.subtitle}</p>}
           </div>
-          <a href={c.featured.ctaHref} className="btn btn-ol" style={{ flexShrink: '0' }}>{c.featured.ctaLabel}</a>
+          <a href={c.showcase.ctaHref} className="btn btn-ol" style={{ flexShrink: '0' }}>{c.showcase.ctaLabel}</a>
         </div>
-        <FeaturedProducts />
+        <ProductShowcase entries={showcase} />
       </div>
+
+      {/* CATEGORIES (opcional, se activa desde el CMS) */}
+      {c.categories.show && (
+        <>
+          <hr className="div-line" />
+          <div className="sec">
+            <div className="sh">
+              <div>
+                <div className="eyebrow">{c.categories.eyebrow}</div>
+                <h2 className="stitle" dangerouslySetInnerHTML={{ __html: c.categories.titleHtml }} />
+              </div>
+              <a href={c.categories.ctaHref} className="btn btn-ol" style={{ flexShrink: '0' }}>{c.categories.ctaLabel}</a>
+            </div>
+            <div className="cat-grid">
+              {c.categories.cards.map((card, i) => (
+                <a key={i} href={card.href} className={`cat-card${i === c.categories.cards.length - 1 ? ' cat-feat' : ''}`}>
+                  <div className="cat-n">{card.n}</div>
+                  <div className="cat-name">{card.name}</div>
+                  <div className="cat-count">{card.count}</div>
+                  <div className="cat-arr">{CAT_ARROW}</div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
 
       {/* IMAGE BREAK 1 */}
       {c.break1Image && (

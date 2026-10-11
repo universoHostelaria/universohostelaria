@@ -174,6 +174,10 @@ Ver todas las solicitudes en el dashboard de Supabase.
     // Send email via Resend
     const RESEND_KEY = process.env.RESEND_API_KEY
     const VENDOR_EMAIL = process.env.VENDOR_EMAIL || 'uh.dev@flowcode.cc'
+    // Pedidos de prueba (email del equipo FlowCode): solo al equipo, nunca al cliente
+    const isTest = /@flowcode\.cc$/i.test(String(contacto_email).trim())
+    const recipient = isTest ? (process.env.TEST_ORDER_EMAIL || 'lucas.carmo@flowcode.cc') : VENDOR_EMAIL
+    let emailStatus: 'sent' | 'failed' | 'disabled' = 'disabled'
 
     if (RESEND_KEY) {
       const resendRes = await fetch('https://api.resend.com/emails', {
@@ -184,14 +188,15 @@ Ver todas las solicitudes en el dashboard de Supabase.
         },
         body: JSON.stringify({
           from: 'Universo Hostelería <pedidos@universohosteleria.es>',
-          to: [VENDOR_EMAIL],
+          to: [recipient],
           reply_to: contacto_email,
-          subject: `Nueva solicitud: ${empresa_nombre} — ${items.length} producto${items.length > 1 ? 's' : ''}`,
+          subject: `${isTest ? '[TEST] ' : ''}Nueva solicitud: ${empresa_nombre} — ${items.length} producto${items.length > 1 ? 's' : ''}`,
           html: emailHtml,
           text: emailBody,
         }),
       })
 
+      emailStatus = resendRes.ok ? 'sent' : 'failed'
       if (!resendRes.ok) {
         const errText = await resendRes.text()
         console.error('Resend error:', errText)
@@ -199,7 +204,8 @@ Ver todas las solicitudes en el dashboard de Supabase.
       }
     }
 
-    return NextResponse.json({ success: true, id: orderId })
+    // En pruebas devolvemos el estado del email para poder verificar el envío
+    return NextResponse.json({ success: true, id: orderId, ...(isTest ? { test: true, emailStatus, recipient } : {}) })
 
   } catch (err) {
     console.error('Order API error:', err)

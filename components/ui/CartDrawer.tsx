@@ -11,7 +11,9 @@ export default function CartDrawer() {
   const { items, isOpen, closeCart, removeItem, updateQty, total, count } = useCart()
   const [showSolicitud, setShowSolicitud] = useState(false)
 
-  if (!isOpen) return null
+  // El formulario se abre al cerrar el carrito: debe seguir montado aunque el carrito esté cerrado
+  const solicitud = showSolicitud ? <SolicitudModal onClose={() => setShowSolicitud(false)} /> : null
+  if (!isOpen) return solicitud
 
   const supplierName = (id: string) =>
     id === 'tilia_romero' ? 'Tilia · Romero' :
@@ -127,9 +129,7 @@ export default function CartDrawer() {
         )}
       </div>
 
-      {showSolicitud && (
-        <SolicitudModal onClose={() => setShowSolicitud(false)} />
-      )}
+      {solicitud}
     </>
   )
 }

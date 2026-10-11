@@ -12,6 +12,8 @@ export type WhyItem = { num: string; title: string; desc: string }
 export type Step = { num: string; title: string; desc: string }
 export type SupItem = { badge: string; name: string; href: string }
 export type FooterCol = { label: string; links: Link[] }
+// Vitrina: un bloque grande por producto, con foto ambientada de fondo
+export type ShowcaseItem = { productId: string; image: string; tagline: string }
 
 export type HomeContent = {
   seo: { title: string; description: string }
@@ -28,8 +30,8 @@ export type HomeContent = {
     stats: Stat[]
   }
   trust: string[]
-  categories: { eyebrow: string; titleHtml: string; ctaLabel: string; ctaHref: string; cards: CatCard[] }
-  featured: { eyebrow: string; titleHtml: string; ctaLabel: string; ctaHref: string }
+  categories: { show: boolean; eyebrow: string; titleHtml: string; ctaLabel: string; ctaHref: string; cards: CatCard[] }
+  showcase: { eyebrow: string; titleHtml: string; subtitle: string; ctaLabel: string; ctaHref: string; items: ShowcaseItem[] }
   break1Image: string
   why: { eyebrow: string; titleHtml: string; items: WhyItem[] }
   split: { image: string; eyebrow: string; titleHtml: string; text: string; ctaLabel: string; ctaHref: string }
@@ -95,6 +97,8 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
     '15 años en el mercado',
   ],
   categories: {
+    // Oculta por defecto: muchas categorías no tienen productos visibles en la campaña
+    show: false,
     eyebrow: 'Categorías',
     titleHtml: 'ENCUENTRA<br />LO QUE <span class="blue">NECESITAS.</span>',
     ctaLabel: 'Ver catálogo completo',
@@ -110,11 +114,19 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
       { n: '10K+', name: 'VER TODO', count: 'Todo el catálogo', href: '/catalog' },
     ],
   },
-  featured: {
-    eyebrow: 'Selección',
-    titleHtml: 'PRODUCTOS <span class="blue">DESTACADOS</span>',
-    ctaLabel: 'Ver todos',
+  showcase: {
+    eyebrow: 'Colección destacada',
+    titleHtml: 'ELIGE. AÑADE. <span class="blue">PIDE.</span>',
+    subtitle: 'Precios finales con IVA incluido. Añade al pedido y recibe tu presupuesto en menos de 24 horas.',
+    ctaLabel: 'Ver catálogo completo',
     ctaHref: '/catalog',
+    items: [
+      { productId: 'RM2254', image: 'https://obtockbxprbdvawkrhko.supabase.co/storage/v1/object/public/product-images/campaign/amb-agua-tortola.jpg', tagline: 'Apilable, ligera y en 5 colores. La silla que aguanta el ritmo de tu sala.' },
+      { productId: 'RM1825', image: 'https://obtockbxprbdvawkrhko.supabase.co/storage/v1/object/public/product-images/campaign/amb-agua-negro.jpg', tagline: 'Base de hierro y tablero a elegir: melamina, Werzalit o Compact. De Ø60 a 90×90 cm.' },
+      { productId: 'RM1734', image: 'https://obtockbxprbdvawkrhko.supabase.co/storage/v1/object/public/product-images/campaign/amb-m1110.jpg', tagline: 'Polipropileno con fibra de vidrio y 8 colores. Hecha para el uso diario.' },
+      { productId: 'sillon-lenox', image: 'https://obtockbxprbdvawkrhko.supabase.co/storage/v1/object/public/product-images/campaign/sillon-lenox-5.jpg', tagline: 'Madera maciza de Sungkay. Calidez natural para restaurantes y hoteles.' },
+      { productId: 'AK0433', image: 'https://obtockbxprbdvawkrhko.supabase.co/storage/v1/object/public/product-images/campaign/sillon-berna-2.jpg', tagline: 'Trenzado y tapizado para interior y terraza. Confort de lounge.' },
+    ],
   },
   break1Image: '',
   why: {
