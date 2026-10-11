@@ -54,11 +54,13 @@ export default async function HomePage() {
 
   return (
     <>
-      <div className="ann">
-        <span dangerouslySetInnerHTML={{ __html: c.announcement.textHtml }} />
-        {'  ·  '}
-        <a href={c.whatsappUrl} target="_blank" rel="noopener noreferrer">{c.announcement.linkLabel}</a>
-      </div>
+      {c.announcement.show && (
+        <div className="ann">
+          <span dangerouslySetInnerHTML={{ __html: c.announcement.textHtml }} />
+          {'  ·  '}
+          <a href={c.whatsappUrl} target="_blank" rel="noopener noreferrer">{c.announcement.linkLabel}</a>
+        </div>
+      )}
 
       <nav>
         <div className="nav-w">

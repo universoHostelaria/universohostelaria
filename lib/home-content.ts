@@ -20,7 +20,7 @@ export type HomeContent = {
   whatsappUrl: string
   logo: string
   nav: { links: Link[]; searchText: string }
-  announcement: { textHtml: string; linkLabel: string }
+  announcement: { show: boolean; textHtml: string; linkLabel: string }
   hero: {
     image: string
     titleHtml: string
@@ -72,6 +72,8 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
     searchText: 'Buscar en 10.000+ productos…',
   },
   announcement: {
+    // Oculta por defecto (se puede activar desde el CMS)
+    show: false,
     textHtml: '<strong>Nuevo:</strong> 15+ fabricantes, 10.000+ productos en un solo lugar',
     linkLabel: 'Habla hoy con nuestro especialista →',
   },
