@@ -329,11 +329,8 @@ function SpecialistCard() {
         </p>
       </div>
       <Link href="https://wa.me/34665953186?text=Hola%2C%20me%20gustar%C3%ADa%20hablar%20con%20un%20especialista." target="_blank" rel="noopener noreferrer" className={styles.specBtn}>
-        <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-          <rect x="2" y="4" width="12" height="10" rx="1.5" stroke="white" strokeWidth="1.4"/>
-          <path d="M2 7h12M5 2v4M11 2v4" stroke="white" strokeWidth="1.4" strokeLinecap="round"/>
-        </svg>
-        Reservar cita gratuita
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2.5 3.5h11a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H7l-3 2.5v-2.5H2.5a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1z" stroke="white" strokeWidth="1.4" strokeLinejoin="round"/></svg>
+        Hablar con un especialista
       </Link>
     </div>
   )

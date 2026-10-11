@@ -39,7 +39,7 @@ export default function Footer() {
         <div>
           <div className={styles.colLabel}>Soporte</div>
           <ul className={styles.links}>
-            <li><Link href="/#especialista">Cita con especialista</Link></li>
+            <li><Link href="/#especialista">Hablar con un especialista</Link></li>
             <li><Link href="mailto:hola@universohosteleria.es">Contacto</Link></li>
             <li><Link href="/legal">Aviso legal</Link></li>
             <li><Link href="/privacidad">Privacidad</Link></li>
