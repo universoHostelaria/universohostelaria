@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import './homepage.css'
 import ProductShowcase from '@/components/ui/ProductShowcase'
+import HeroTilt from '@/components/ui/HeroTilt'
 import { getHomeContent } from '@/lib/home-content-server'
 import { supabase, type Product } from '@/lib/supabase'
 
@@ -88,9 +89,21 @@ export default async function HomePage() {
       </nav>
 
       {/* HERO */}
-      <section className="hero">
-        {c.hero.image && <img className="hero-img-side" src={c.hero.image} alt="Sillón Lima — Arkimueble" />}
-        <div className="hero-fade"></div>
+      <section className={`hero${c.hero.style === 'studio' ? ' hero-studio' : ''}`}>
+        {c.hero.style === 'studio' ? (
+          <HeroTilt
+            image={c.hero.studio.image}
+            alt={c.hero.studio.caption || 'Mobiliario para hostelería'}
+            caption={c.hero.studio.caption}
+            captionSub={c.hero.studio.captionSub}
+            href={c.hero.studio.href}
+          />
+        ) : (
+          <>
+            {c.hero.image && <img className="hero-img-side" src={c.hero.image} alt="Sillón Lima — Arkimueble" />}
+            <div className="hero-fade"></div>
+          </>
+        )}
         <div className="hero-body">
           <h1 dangerouslySetInnerHTML={{ __html: c.hero.titleHtml }} />
           <p className="hero-sub" dangerouslySetInnerHTML={{ __html: c.hero.subtitleHtml }} />

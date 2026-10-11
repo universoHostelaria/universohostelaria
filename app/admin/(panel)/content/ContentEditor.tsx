@@ -73,7 +73,25 @@ export default function ContentEditor({ initial }: { initial: HomeContent }) {
 
       {/* HERO */}
       <Section title="Hero (cabecera principal)">
-        <Img label="Imagen del hero" slot="hero" v={c.hero.image} on={(v) => patch((d) => { d.hero.image = v })} />
+        <div className="adm-field">
+          <label>Estilo del hero</label>
+          <select className="adm-select" value={c.hero.style} onChange={(e) => patch((d) => { d.hero.style = e.target.value as 'studio' | 'photo' })}>
+            <option value="studio">Estudio — fondo blanco, producto que se inclina con el ratón</option>
+            <option value="photo">Foto — imagen lateral clásica</option>
+          </select>
+        </div>
+        {c.hero.style === 'studio' ? (
+          <>
+            <Img label="Producto (foto con fondo blanco)" slot="hero-studio" v={c.hero.studio.image} on={(v) => patch((d) => { d.hero.studio.image = v })} />
+            <Row3>
+              <Text label="Nombre bajo el producto" v={c.hero.studio.caption} on={(v) => patch((d) => { d.hero.studio.caption = v })} />
+              <Text label="Detalle" v={c.hero.studio.captionSub} on={(v) => patch((d) => { d.hero.studio.captionSub = v })} />
+              <Text label="Enlace" v={c.hero.studio.href} on={(v) => patch((d) => { d.hero.studio.href = v })} />
+            </Row3>
+          </>
+        ) : (
+          <Img label="Imagen del hero" slot="hero" v={c.hero.image} on={(v) => patch((d) => { d.hero.image = v })} />
+        )}
         <Area label="Título (HTML: usa <br/> y <span class='blue'>…</span> para el azul)" v={c.hero.titleHtml} on={(v) => patch((d) => { d.hero.titleHtml = v })} html />
         <Area label="Subtítulo (HTML)" v={c.hero.subtitleHtml} on={(v) => patch((d) => { d.hero.subtitleHtml = v })} html />
         <Row>

@@ -22,7 +22,10 @@ export type HomeContent = {
   nav: { links: Link[]; searchText: string; ctaLabel: string }
   announcement: { textHtml: string; linkLabel: string }
   hero: {
+    // 'studio': fondo blanco + producto recortado que se inclina con el ratón. 'photo': imagen lateral clásica.
+    style: 'studio' | 'photo'
     image: string
+    studio: { image: string; caption: string; captionSub: string; href: string }
     titleHtml: string
     subtitleHtml: string
     cta1: Link
@@ -77,7 +80,14 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
     linkLabel: 'Habla hoy con nuestro especialista →',
   },
   hero: {
+    style: 'studio',
     image: '',
+    studio: {
+      image: 'https://obtockbxprbdvawkrhko.supabase.co/storage/v1/object/public/product-images/campaign/sillon-lenox-0.jpg',
+      caption: 'Sillón Lenox',
+      captionSub: 'Madera maciza',
+      href: '/product/sillon-lenox',
+    },
     titleHtml: 'GRAN<br />HOSTELERÍA<br /><span class="blue">EMPIEZA<br />AQUÍ.</span>',
     subtitleHtml:
       'Más de <strong>10.000 productos</strong> de <strong>15+ fabricantes</strong> europeos. Elige, compara y pide directo — con un especialista cuando lo necesites.',
