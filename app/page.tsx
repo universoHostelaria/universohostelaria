@@ -106,11 +106,20 @@ export default async function HomePage() {
           <h1 dangerouslySetInnerHTML={{ __html: c.hero.titleHtml }} />
           <p className="hero-sub" dangerouslySetInnerHTML={{ __html: c.hero.subtitleHtml }} />
           <div className="hero-ctas">
-            <a href={c.hero.cta1.href} className="btn btn-dark" style={{ padding: '13px 26px', fontSize: '14.5px', borderRadius: '9px' }}>
-              {c.hero.cta1.label}
-              <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            </a>
-            <a href={c.whatsappUrl} target="_blank" rel="noopener noreferrer" className="ghost">
+            {/* Botón 1 opcional (vacío = oculto); si no hay, el de especialista pasa a ser el principal */}
+            {c.hero.cta1.label && (
+              <a href={c.hero.cta1.href} className="btn btn-dark" style={{ padding: '13px 26px', fontSize: '14.5px', borderRadius: '9px' }}>
+                {c.hero.cta1.label}
+                <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </a>
+            )}
+            <a
+              href={c.whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={c.hero.cta1.label ? 'ghost' : 'btn btn-dark'}
+              style={c.hero.cta1.label ? undefined : { padding: '13px 26px', fontSize: '14.5px', borderRadius: '9px' }}
+            >
               {c.hero.cta2Label}
               <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </a>

@@ -10,5 +10,8 @@ export async function getHomeContent(): Promise<HomeContent> {
     .eq('key', 'home')
     .maybeSingle()
 
-  return deepMerge(DEFAULT_HOME_CONTENT, data?.data ?? {})
+  const db = { ...((data?.data as Record<string, unknown>) ?? {}) }
+  // Solo en local: HOME_PREVIEW_DEFAULTS=hero,showcase usa los textos del código para esas secciones
+  for (const k of (process.env.HOME_PREVIEW_DEFAULTS ?? '').split(',').map((x) => x.trim()).filter(Boolean)) delete db[k]
+  return deepMerge(DEFAULT_HOME_CONTENT, db)
 }

@@ -89,15 +89,14 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
       captionSub: 'Madera maciza',
       href: '/product/sillon-lenox',
     },
-    titleHtml: 'GRAN<br />HOSTELERÍA<br /><span class="blue">EMPIEZA<br />AQUÍ.</span>',
+    titleHtml: 'MUEBLES<br />PARA TU<br /><span class="blue">NEGOCIO.</span>',
     subtitleHtml:
-      'Más de <strong>10.000 productos</strong> de <strong>15+ fabricantes</strong> europeos. Elige, compara y pide directo — con un especialista cuando lo necesites.',
-    cta1: { label: 'Ver el catálogo', href: '/catalog' },
+      'Sillas, mesas y sillones de calidad para <strong>hoteles, restaurantes, bares, cafeterías y terrazas</strong>.',
+    cta1: { label: '', href: '/catalog' },
     cta2Label: 'Hablar con el especialista',
     stats: [
-      { val: '10K', sup: '+', label: 'Productos' },
-      { val: '15', sup: '+', label: 'Fabricantes' },
-      { val: '15', sup: 'años', label: 'De experiencia' },
+      { val: '15', sup: 'años', label: 'De experiencia en hostelería' },
+      { val: '15', sup: '+', label: 'Fabricantes europeos' },
     ],
   },
   trust: [

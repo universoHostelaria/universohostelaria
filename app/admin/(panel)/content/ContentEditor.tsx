@@ -98,7 +98,7 @@ export default function ContentEditor({ initial }: { initial: HomeContent }) {
         <Area label="Título (HTML: usa <br/> y <span class='blue'>…</span> para el azul)" v={c.hero.titleHtml} on={(v) => patch((d) => { d.hero.titleHtml = v })} html />
         <Area label="Subtítulo (HTML)" v={c.hero.subtitleHtml} on={(v) => patch((d) => { d.hero.subtitleHtml = v })} html />
         <Row>
-          <Text label="Botón 1 — texto" v={c.hero.cta1.label} on={(v) => patch((d) => { d.hero.cta1.label = v })} />
+          <Text label="Botón 1 — texto (vacío = sin botón)" v={c.hero.cta1.label} on={(v) => patch((d) => { d.hero.cta1.label = v })} />
           <Text label="Botón 1 — enlace" v={c.hero.cta1.href} on={(v) => patch((d) => { d.hero.cta1.href = v })} />
         </Row>
         <Text label="Botón 2 — texto (lleva a WhatsApp)" v={c.hero.cta2Label} on={(v) => patch((d) => { d.hero.cta2Label = v })} />
