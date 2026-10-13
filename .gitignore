@@ -33,3 +33,6 @@ next-env.d.ts
 
 # Playwright MCP artifacts
 .playwright-mcp/
+
+# Informes diarios de Google Ads (histórico local)
+.ads-reports/
