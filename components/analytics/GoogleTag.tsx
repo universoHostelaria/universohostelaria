@@ -1,7 +1,7 @@
 'use client'
 import Script from 'next/script'
 import { useEffect } from 'react'
-import { GADS_ID, CONSENT_KEY, gtag, grantConsent } from '@/lib/analytics'
+import { GADS_ID, CONSENT_KEY, grantConsent, trackWhatsApp } from '@/lib/analytics'
 
 // Google tag con Consent Mode v2: todo denegado por defecto hasta que el usuario acepte.
 export default function GoogleTag() {
@@ -10,7 +10,7 @@ export default function GoogleTag() {
     // Clic en WhatsApp = contacto (conversión secundaria)
     const onClick = (e: MouseEvent) => {
       const a = (e.target as HTMLElement | null)?.closest?.('a[href*="wa.me"]')
-      if (a) gtag('event', 'whatsapp_click', { page_path: location.pathname })
+      if (a) trackWhatsApp(location.pathname)
     }
     document.addEventListener('click', onClick)
     return () => document.removeEventListener('click', onClick)

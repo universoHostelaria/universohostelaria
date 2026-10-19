@@ -3,6 +3,9 @@ export const GADS_ID = 'AW-18495865106'
 // Etiqueta de la acción de conversión "Enviar formulario de lead" (Google Ads → Conversiones → snippet de evento).
 export const GADS_LEAD_LABEL = process.env.NEXT_PUBLIC_GADS_LEAD_LABEL ?? 'ARDJCI_4jZIdEJKCwvNE'
 
+// Acción de conversión «Clic en WhatsApp» (contacto)
+export const GADS_WHATSAPP_LABEL = 'm5KzCMCipaIdEJKCwvNE'
+
 export const CONSENT_KEY = 'uh_consent'
 
 type Gtag = (...args: unknown[]) => void
@@ -26,4 +29,10 @@ export function grantConsent() {
 export function trackLead(ref?: string | null) {
   gtag('event', 'generate_lead', { lead_ref: ref ?? undefined })
   if (GADS_LEAD_LABEL) gtag('event', 'conversion', { send_to: `${GADS_ID}/${GADS_LEAD_LABEL}`, value: 1.0, currency: 'BRL' })
+}
+
+// Clic en cualquier enlace de WhatsApp: evento propio + conversión de contacto en Google Ads
+export function trackWhatsApp(path: string) {
+  gtag('event', 'whatsapp_click', { page_path: path })
+  gtag('event', 'conversion', { send_to: `${GADS_ID}/${GADS_WHATSAPP_LABEL}`, value: 1.0, currency: 'BRL' })
 }
