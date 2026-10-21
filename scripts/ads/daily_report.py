@@ -274,7 +274,7 @@ GROUPS_ES = {"Sillas hostelería": "Sillas", "Mesas hostelería": "Mesas", "Sill
 DEVICES_ES = {"MOBILE": "Móvil", "DESKTOP": "Ordenador", "TABLET": "Tablet", "CONNECTED_TV": "TV", "OTHER": "Otros"}
 STATUS_ES = {"ELIGIBLE": "Activa", "LEARNING": "Activa, en aprendizaje", "PAUSED": "Pausada",
              "LIMITED": "Activa, limitada", "NOT_ELIGIBLE": "No apta", "PENDING": "Pendiente"}
-CONTACT_ES = {"Clic en WhatsApp": "WhatsApp", "Enviar formulário de lead": "Formulario web", "Clicks to call": "Clic en llamar",
+CONTACT_ES = {"Clic en WhatsApp": "WhatsApp", "Enviar formulário de lead": "Formulario web", "Clicks to call": "Clic en llamar", "Llamada desde el anuncio (30 s o más)": "Llamadas",
               "Lead form - Submit": "Formulario del anuncio", "Local actions - Directions": "Cómo llegar"}
 MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
 
@@ -426,7 +426,7 @@ def render(data, sugerencias=None, nota=None):
         tipos = data.get("contactos_por_tipo") or {}
         tipos_txt = " &#183; ".join(f'{CONTACT_ES.get(k, k)}: {v:g}' for k, v in tipos.items()) or "ninguno todav&iacute;a"
         rows.append(wrap(f'<div style="font-family:{FONT};font-size:12.5px;line-height:19px;color:{MUTED};margin-top:10px">'
-                         f'Contac. = contactos registrados por Google Ads (formulario, WhatsApp, clic en llamar). '
+                         f'Contac. = contactos registrados por Google Ads (formulario, WhatsApp, llamadas y clics en llamar). '
                          f'Solic. = pedidos de presupuesto recibidos en la web. Contactos por tipo: {tipos_txt}.</div>'))
 
     # Por producto
@@ -520,7 +520,7 @@ def sugerencias_auto(data):
     tipos_all = data.get("contactos_por_tipo") or {}
     reales = sum(v for k, v in tipos_all.items() if k != "Clicks to call")  # el clic en llamar no garantiza llamada
     if solicitudes or reales:
-        SING = {"WhatsApp": ("clic en WhatsApp", "clics en WhatsApp"), "Clic en llamar": ("clic en el botón de llamar del anuncio (no garantiza que la llamada se hiciera)", "clics en el botón de llamar del anuncio (no garantizan que la llamada se hiciera)"),
+        SING = {"WhatsApp": ("clic en WhatsApp", "clics en WhatsApp"), "Llamadas": ("llamada de 30 s o más", "llamadas de 30 s o más"), "Clic en llamar": ("clic en el botón de llamar del anuncio (no garantiza que la llamada se hiciera)", "clics en el botón de llamar del anuncio (no garantizan que la llamada se hiciera)"),
                 "Formulario web": ("formulario enviado", "formularios enviados"), "Formulario del anuncio": ("formulario del anuncio", "formularios del anuncio"),
                 "Cómo llegar": ("consulta de cómo llegar", "consultas de cómo llegar")}
         partes = [f'{v:g} {SING.get(CONTACT_ES.get(k, k), (k, k))[0 if v == 1 else 1]}' for k, v in (data.get("contactos_por_tipo") or {}).items()]
