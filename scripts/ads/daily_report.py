@@ -37,17 +37,27 @@ ROOT = os.path.join(os.path.dirname(__file__), "..", "..")
 
 
 # ── credenciales ─────────────────────────────────────────────────────
+ALIASES = {"NEXT_PUBLIC_SUPABASE_URL": "SUPABASE_URL"}
+
+
 def env(name):
-    if os.environ.get(name):
-        return os.environ[name]
-    for line in open(os.path.join(ROOT, ".env.local")):
-        if line.startswith(name + "="):
-            return line.split("=", 1)[1].strip().strip('"').strip("'")
+    for n in (name, ALIASES.get(name)):
+        if n and os.environ.get(n):
+            return os.environ[n]
+    path = os.path.join(ROOT, ".env.local")
+    if os.path.exists(path):
+        for line in open(path):
+            if line.startswith(name + "="):
+                return line.split("=", 1)[1].strip().strip('"').strip("'")
     return None
 
 
 def access_token():
-    adc = json.load(open(os.path.expanduser("~/.config/gcloud/application_default_credentials.json")))
+    if os.environ.get("GOOGLE_ADS_REFRESH_TOKEN"):
+        adc = {"client_id": os.environ["GOOGLE_ADS_CLIENT_ID"], "client_secret": os.environ["GOOGLE_ADS_CLIENT_SECRET"],
+               "refresh_token": os.environ["GOOGLE_ADS_REFRESH_TOKEN"]}
+    else:
+        adc = json.load(open(os.path.expanduser("~/.config/gcloud/application_default_credentials.json")))
     data = urllib.parse.urlencode({
         "client_id": adc["client_id"], "client_secret": adc["client_secret"],
         "refresh_token": adc["refresh_token"], "grant_type": "refresh_token",
@@ -127,7 +137,9 @@ def orders(since_utc, until_utc):
     rows = json.load(urllib.request.urlopen(req))
     # Fuera pruebas internas; sin datos personales en el informe
     rows = [r for r in rows if not is_test_order(r)]
-    return [{"fecha": r["created_at"][:16].replace("T", " "), "productos": [f'{i.get("name")} × {i.get("qty")}' for i in r.get("items") or []],
+    return [{"fecha": r["created_at"][:16].replace("T", " "),
+             "dia_local": dt.datetime.fromisoformat(r["created_at"].replace("Z", "+00:00")).astimezone(TZ).date().isoformat(),
+             "productos": [f'{i.get("name")} × {i.get("qty")}' for i in r.get("items") or []],
              "total_sin_iva": r.get("total_estimado")} for r in rows]
 
 
@@ -176,6 +188,16 @@ def collect(day):
              metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions
       FROM keyword_view WHERE segments.date BETWEEN '{acc_from}' AND '{d}'
       ORDER BY metrics.cost_micros DESC LIMIT 60""")
+    daily = gaql(tok, dev, f"""
+      SELECT segments.date, metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.all_conversions
+      FROM campaign WHERE segments.date BETWEEN '{LAUNCH.isoformat()}' AND '{d}'""")
+    conv_by = gaql(tok, dev, f"""
+      SELECT segments.conversion_action_name, metrics.all_conversions
+      FROM campaign WHERE segments.date BETWEEN '{LAUNCH.isoformat()}' AND '{d}'""")
+    negs = gaql(tok, dev, """
+      SELECT campaign_criterion.keyword.text FROM campaign_criterion
+      WHERE campaign_criterion.negative = TRUE AND campaign_criterion.type = 'KEYWORD'""")
+    bid = gaql(tok, dev, "SELECT campaign.target_spend.cpc_bid_ceiling_micros FROM campaign")
     ads = gaql(tok, dev, """
       SELECT ad_group.name, ad_group_ad.ad_strength, ad_group_ad.primary_status,
              ad_group_ad.policy_summary.approval_status FROM ad_group_ad""")
@@ -230,7 +252,17 @@ def collect(day):
             "aprobacion": r["adGroupAd"].get("policySummary", {}).get("approvalStatus"),
         } for r in ads],
         "pedidos_web_dia": orders(s, e),
-        "pedidos_web_acumulado": len(orders(s_acc, e)),
+        "pedidos_web_acumulado": len(pedidos_all := orders(day_bounds_utc(LAUNCH)[0], e)),
+        "serie_diaria": [{
+            "fecha": r["segments"]["date"], "impresiones": int(m(r, "impressions")), "clics": int(m(r, "clicks")),
+            "coste": round(m(r, "costMicros") / 1e6, 2), "contactos_google": round(m(r, "allConversions"), 1),
+            "solicitudes_web": sum(1 for o in pedidos_all if o["dia_local"] == r["segments"]["date"]),
+        } for r in sorted(daily, key=lambda r: r["segments"]["date"])],
+        "contactos_por_tipo": {k: v for k, v in (
+            (name, round(sum(m(r, "allConversions") for r in conv_by if r["segments"]["conversionActionName"] == name), 1))
+            for name in {r["segments"]["conversionActionName"] for r in conv_by}) if v},
+        "negativas": sorted({r["campaignCriterion"]["keyword"]["text"].lower() for r in negs}),
+        "cpc_maximo": int(bid[0]["campaign"].get("targetSpend", {}).get("cpcBidCeilingMicros", 0)) / 1e6 if bid else None,
     }
 
 
@@ -242,6 +274,8 @@ GROUPS_ES = {"Sillas hostelería": "Sillas", "Mesas hostelería": "Mesas", "Sill
 DEVICES_ES = {"MOBILE": "Móvil", "DESKTOP": "Ordenador", "TABLET": "Tablet", "CONNECTED_TV": "TV", "OTHER": "Otros"}
 STATUS_ES = {"ELIGIBLE": "Activa", "LEARNING": "Activa, en aprendizaje", "PAUSED": "Pausada",
              "LIMITED": "Activa, limitada", "NOT_ELIGIBLE": "No apta", "PENDING": "Pendiente"}
+CONTACT_ES = {"Clic en WhatsApp": "WhatsApp", "Enviar formulário de lead": "Formulario web", "Clicks to call": "Llamadas",
+              "Lead form - Submit": "Formulario del anuncio", "Local actions - Directions": "Cómo llegar"}
 MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
 
 INK, MUTED, LINE, SOFT, BLUE, BLUE_SOFT = "#111111", "#6B6B6B", "#ECECEA", "#F6F6F4", "#2B6FD4", "#EAF1FB"
@@ -270,7 +304,7 @@ def esc(s):
 
 
 def title(t):
-    return (f'<tr><td style="padding:30px 32px 10px;font-family:{FONT};font-size:12px;font-weight:700;'
+    return (f'<tr><td class="px" style="padding:30px 32px 10px;font-family:{FONT};font-size:12px;font-weight:700;'
             f'letter-spacing:1.4px;text-transform:uppercase;color:{BLUE}">{t}</td></tr>')
 
 
@@ -293,20 +327,23 @@ def bar(parts):
     return f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-radius:6px;overflow:hidden"><tr>{cells}</tr></table>'
 
 
-def data_table(headers, rows, first_wide=True):
-    th = "".join(
-        f'<td style="padding:0 0 8px;font-family:{FONT};font-size:11px;font-weight:600;color:{MUTED};'
-        f'text-align:{"left" if i == 0 else "right"};border-bottom:1px solid {LINE}">{h}</td>' for i, h in enumerate(headers))
-    trs = ""
-    for row in rows:
-        trs += "<tr>" + "".join(
-            f'<td style="padding:10px 0;font-family:{FONT};font-size:14px;color:{INK};'
-            f'text-align:{"left" if i == 0 else "right"};border-bottom:1px solid {LINE}">{c}</td>' for i, c in enumerate(row)) + "</tr>"
+def data_table(headers, rows, first_wide=True, compact=False):
+    fs = "13px" if compact else "14px"
+    def cell(i, c, head=False):
+        pad = "0 0 8px" if head else "10px 0"
+        left = "" if i == 0 else ";padding-left:8px"
+        nowrap = "white-space:nowrap;" if (i > 0 or compact) else ""
+        style = (f'padding:{pad}{left};font-family:{FONT};{nowrap}text-align:{"left" if i == 0 else "right"};'
+                 + (f'font-size:11px;font-weight:600;color:{MUTED};border-bottom:1px solid {LINE}' if head
+                    else f'font-size:{fs};color:{INK};border-bottom:1px solid {LINE}'))
+        return f'<td style="{style}">{c}</td>'
+    th = "".join(cell(i, h, True) for i, h in enumerate(headers))
+    trs = "".join("<tr>" + "".join(cell(i, c) for i, c in enumerate(row)) + "</tr>" for row in rows)
     return f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>{th}</tr>{trs}</table>'
 
 
 def wrap(inner):
-    return f'<tr><td style="padding:0 32px">{inner}</td></tr>'
+    return f'<tr><td class="px" style="padding:0 32px">{inner}</td></tr>'
 
 
 def headline(data):
@@ -342,7 +379,7 @@ def render(data, sugerencias=None, nota=None):
 
     # KPIs 2×2
     rows.append(title("Resumen del día"))
-    rows.append(f'<tr><td style="padding:0 26px">'
+    rows.append(f'<tr><td class="pxk" style="padding:0 26px">'
                 f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0">'
                 f'<tr>{kpi_cell("Veces que se vio el anuncio", num(dm["impresiones"]), "impresiones")}'
                 f'{kpi_cell("Personas que hicieron clic", num(dm["clics"]), pct(dm["ctr"], 1) + " de quienes lo vieron")}</tr>'
@@ -372,11 +409,31 @@ def render(data, sugerencias=None, nota=None):
         ["Solicitudes en la web", str(data["pedidos_web_acumulado"])],
     ])))
 
+    # Día a día desde el lanzamiento
+    serie = data.get("serie_diaria") or []
+    if serie:
+        rows.append(title("Día a día"))
+        dias = ["lun", "mar", "mié", "jue", "vie", "sáb", "dom"]
+        filas = []
+        for r in serie:
+            d = dt.date.fromisoformat(r["fecha"])
+            filas.append([f'{dias[d.weekday()]} {d.day}/{d.month}', num(r["impresiones"]), num(r["clics"]), money(r["coste"]),
+                          f'{r["contactos_google"]:g}'.replace(".", ","), str(r["solicitudes_web"])])
+        tot = [f'<b>Total</b>', f'<b>{num(sum(r["impresiones"] for r in serie))}</b>', f'<b>{num(sum(r["clics"] for r in serie))}</b>',
+               f'<b>{money(sum(r["coste"] for r in serie))}</b>', f'<b>{sum(r["contactos_google"] for r in serie):g}</b>'.replace(".", ","),
+               f'<b>{sum(r["solicitudes_web"] for r in serie)}</b>']
+        rows.append(wrap(data_table(["Día", "Impr.", "Clics", "Gasto", "Contac.", "Solic."], filas + [tot], compact=True)))
+        tipos = data.get("contactos_por_tipo") or {}
+        tipos_txt = " &#183; ".join(f'{CONTACT_ES.get(k, k)}: {v:g}' for k, v in tipos.items()) or "ninguno todav&iacute;a"
+        rows.append(wrap(f'<div style="font-family:{FONT};font-size:12.5px;line-height:19px;color:{MUTED};margin-top:10px">'
+                         f'Contac. = contactos registrados por Google Ads (formulario, WhatsApp, llamadas). '
+                         f'Solic. = pedidos de presupuesto recibidos en la web. Contactos por tipo: {tipos_txt}.</div>'))
+
     # Por producto
     grupos = [[GROUPS_ES.get(g, g), num(v["impresiones"]), num(v["clics"]), money(v["coste"])]
               for g, v in sorted(data["grupos_dia"].items(), key=lambda x: -x[1]["impresiones"])]
     if grupos:
-        rows.append(title("Por producto"))
+        rows.append(title("Por producto (" + fecha_es(data["dia"], year=False) + ")"))
         rows.append(wrap(data_table(["Grupo", "Impresiones", "Clics", "Inversión"], grupos)))
 
     # Dispositivos (en una línea)
@@ -420,9 +477,11 @@ def render(data, sugerencias=None, nota=None):
                 f'Informe autom&aacute;tico de FlowCode.</div></td></tr>')
 
     doc = ('<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
-           '<title>Informe Google Ads</title></head>'
+           '<title>Informe Google Ads</title>'
+           '<style>@media (max-width:400px){.px{padding-left:18px!important;padding-right:18px!important}'
+           '.pxk{padding-left:12px!important;padding-right:12px!important}.outer{padding:12px 6px!important}}</style></head>'
            f'<body style="margin:0;padding:0;background:#EFEFEC">'
-           f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#EFEFEC"><tr><td align="center" style="padding:24px 12px">'
+           f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#EFEFEC"><tr><td class="outer" align="center" style="padding:24px 12px">'
            f'<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:#FFFFFF;border-radius:16px">'
            + "".join(rows) + '</table></td></tr></table></body></html>')
     # Acentos a prueba de cualquier cliente de correo
@@ -440,6 +499,129 @@ def render_text(data, sugerencias):
     return "\n".join(lines)
 
 
+# ── Sugerencias automáticas (reglas) ────────────────────────────────
+# Señales en búsquedas que no encajan con el catálogo (sillas, mesas y sillones de hostelería)
+IRRELEVANT = ["segunda mano", "usad", "wallapop", "milanuncios", "ikea", "gratis", "alquiler", "empleo", "trabajo",
+              "curso", "liquidaci", "outlet", "taburete", "alta", "catering", "sof", "cama", "colchon", "oficina",
+              "escritorio", "gaming", "infantil", "niño", "jardin", "jardín", "diy", "bricolaje", "segunda"]
+
+
+def sugerencias_auto(data):
+    """Devuelve 3–5 sugerencias en español, priorizadas, a partir de las cifras."""
+    out = []  # (prioridad, titulo, texto)
+    dm, ac, cu = data["dia_metricas"], data["acumulado"], data["cuota_impresiones"]
+    serie = data.get("serie_diaria") or []
+    contactos = sum(r["contactos_google"] for r in serie)
+    solicitudes = data.get("pedidos_web_acumulado", 0)
+    negs = set(data.get("negativas") or [])
+    cpc_max = data.get("cpc_maximo")
+
+    # 1) Contactos
+    if solicitudes or contactos:
+        SING = {"WhatsApp": ("clic en WhatsApp", "clics en WhatsApp"), "Llamadas": ("llamada", "llamadas"),
+                "Formulario web": ("formulario enviado", "formularios enviados"), "Formulario del anuncio": ("formulario del anuncio", "formularios del anuncio"),
+                "Cómo llegar": ("consulta de cómo llegar", "consultas de cómo llegar")}
+        partes = [f'{v:g} {SING.get(CONTACT_ES.get(k, k), (k, k))[0 if v == 1 else 1]}' for k, v in (data.get("contactos_por_tipo") or {}).items()]
+        if solicitudes:
+            partes.append(f'{solicitudes} {"solicitud" if solicitudes == 1 else "solicitudes"} en la web')
+        out.append((1, "Hay contactos: hay que responder rápido.",
+                    'Desde el lanzamiento: ' + " y ".join(partes) + '. Responder en menos de una hora multiplica las opciones de venta.'))
+    elif ac["clics"] >= 50:
+        out.append((1, "Muchos clics y aún ningún contacto.",
+                    f'{num(ac["clics"])} clics desde el lanzamiento sin solicitudes ni contactos registrados. Conviene revisar la página a la que llega '
+                    'cada anuncio (más fotos, precio claro y botón de WhatsApp visible) y simplificar el formulario de pedido.'))
+
+    # 2) Presupuesto vs posición
+    if cu.get("perdida_por_presupuesto_pct") and cu["perdida_por_presupuesto_pct"] >= 40:
+        out.append((2, "El presupuesto limita el alcance.",
+                    f'El anuncio se perdió el {pct(cu["perdida_por_presupuesto_pct"])} de las búsquedas por falta de presupuesto. '
+                    'Si los contactos acompañan, subir el presupuesto diario es la forma más directa de crecer.'))
+    elif cu.get("perdida_por_ranking_pct") and cu["perdida_por_ranking_pct"] >= 50:
+        txt = f'Se perdió el {pct(cu["perdida_por_ranking_pct"])} de las búsquedas por posición (otros anunciantes pujan más o tienen anuncios más relevantes). '
+        txt += (f'El clic máximo está en {money(cpc_max)}. ' if cpc_max else '') + 'Si en unos días sigue así, proponemos subirlo un poco más o concentrar el presupuesto en las palabras que mejor funcionan.'
+        out.append((3, "La posición es lo que más limita.", txt))
+
+    # 3) Búsquedas irrelevantes con clics y aún no bloqueadas
+    malas = {}
+    for t in data["terminos_7_dias"]:
+        term = t["termino"].lower()
+        hit = next((w for w in IRRELEVANT if w in term), None)
+        if hit and t["clics"] > 0 and not any(n in term for n in negs):
+            malas[t["termino"]] = malas.get(t["termino"], 0) + t["clics"]
+    if malas:
+        lista = ", ".join(f'«{k}»' for k in list(malas)[:4])
+        out.append((2, "Bloquear búsquedas que no encajan.",
+                    f'Hubo clics en búsquedas que no corresponden al catálogo: {lista}. Proponemos añadirlas como palabras negativas.'))
+
+    # 4) Reparto entre grupos
+    ga = data.get("grupos_acumulado") or {}
+    tot = sum(v["coste"] for v in ga.values()) or 0
+    if tot:
+        g, v = max(ga.items(), key=lambda x: x[1]["coste"])
+        share = v["coste"] / tot * 100
+        if share >= 65:
+            out.append((4, f'{GROUPS_ES.get(g, g)}: casi toda la inversión.',
+                        f'El {pct(share)} de la inversión y {num(v["clics"])} clics van a {GROUPS_ES.get(g, g).lower()}. '
+                        'Conviene que ese anuncio lleve a la página más convincente (por ejemplo, la ficha del modelo más vendido).'))
+        for g2, v2 in ga.items():
+            if v2["impresiones"] < 30 and len(serie) >= 7:
+                out.append((5, f'{GROUPS_ES.get(g2, g2)}: casi sin búsquedas.',
+                            f'Solo {num(v2["impresiones"])} impresiones desde el lanzamiento. Proponemos ampliar sus palabras clave o mover ese presupuesto a los grupos que funcionan.'))
+
+    # 5) Tendencia del CTR (últimos 3 días vs 3 anteriores)
+    if len(serie) >= 6:
+        def ctr(rs):
+            i = sum(r["impresiones"] for r in rs); return (sum(r["clics"] for r in rs) / i * 100) if i else 0
+        a, b = ctr(serie[-3:]), ctr(serie[-6:-3])
+        if b and a < b * 0.7:
+            out.append((4, "Baja el interés por el anuncio.",
+                        f'El porcentaje de clics bajó de {pct(b, 1)} a {pct(a, 1)} en los últimos días. Proponemos renovar títulos y textos del anuncio.'))
+        elif b and a > b * 1.3:
+            out.append((6, "Sube el interés por el anuncio.", f'El porcentaje de clics pasó de {pct(b, 1)} a {pct(a, 1)}. Buena señal: mantener los textos actuales.'))
+
+    # 6) Móvil
+    dd = data.get("dispositivos_dia") or {}
+    ti = sum(v["impresiones"] for v in dd.values())
+    if ti and dd.get("MOBILE", {}).get("impresiones", 0) / ti >= 0.85:
+        out.append((6, "Casi todo llega desde el móvil.",
+                    f'El {pct(dd["MOBILE"]["impresiones"] / ti * 100)} de las impresiones fue en móvil: la web y el botón de WhatsApp en móvil son clave.'))
+
+    # 7) Estrategia de puja
+    if contactos >= 15:
+        out.append((3, "Ya hay datos para pujar por contactos.",
+                    f'Con {contactos:g} contactos registrados, proponemos pasar de «maximizar clics» a «maximizar conversiones», para que Google busque contactos y no solo visitas.'))
+
+    # Relleno para tener siempre al menos 3
+    if len(out) < 3:
+        out.append((7, "Seguir acumulando datos.", f'Con {num(ac["clics"])} clics aún es pronto para cambios grandes; revisaremos las búsquedas cada pocos días.'))
+    if len(out) < 3:
+        out.append((8, "Revisar los contactos de WhatsApp.", "Si alguien escribe por WhatsApp mencionando el anuncio, avisadnos para cruzarlo con la campaña."))
+
+    out.sort(key=lambda x: x[0])
+    seen, final = set(), []
+    for _, t, x in out:
+        if t not in seen:
+            seen.add(t); final.append({"titulo": t, "texto": x})
+    return final[:5]
+
+
+# ── Envío (ruta interna de la web, que usa Resend) ──────────────────
+SITE = os.environ.get("SITE_URL", "https://www.universohosteleria.es")
+
+
+def send(to, subject, html_body, text_body):
+    key = env("SUPABASE_SERVICE_KEY")
+    req = urllib.request.Request(f"{SITE}/api/internal/report-mail", method="POST",
+                                 data=json.dumps({"to": to, "subject": subject, "html": html_body, "text": text_body}).encode(),
+                                 headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"})
+    try:
+        res = json.load(urllib.request.urlopen(req))
+    except urllib.error.HTTPError as e:
+        print("ERROR_ENVIO:", e.code, e.read().decode()[:500], file=sys.stderr)
+        sys.exit(4)
+    print("ENVIADO", res)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--day", default="yesterday", help="yesterday | today | AAAA-MM-DD")
@@ -447,7 +629,37 @@ def main():
     ap.add_argument("--render", help="ruta base ya generada: escribe <base>.html y <base>.txt con las sugerencias")
     ap.add_argument("--sugerencias", help='JSON con [{"titulo": "...", "texto": "..."}] (en español)')
     ap.add_argument("--nota", help="aviso opcional bajo la cabecera")
+    ap.add_argument("--auto", action="store_true", help="cifras + sugerencias automáticas + HTML/TXT")
+    ap.add_argument("--send", action="store_true", help="con --auto: envía el email")
+    ap.add_argument("--to", default=os.environ.get("REPORT_TO", "lucas.carmo@flowcode.cc"), help="destinatarios separados por comas")
+    ap.add_argument("--notify-failure", help="envía solo a lucas.carmo un aviso de fallo con este texto")
     a = ap.parse_args()
+
+    if a.notify_failure:
+        msg = html.escape(a.notify_failure)
+        send(["lucas.carmo@flowcode.cc"], "Informe Google Ads UH no generado",
+             f'<p style="font-family:Arial,sans-serif;font-size:14px">El informe diario no se ha podido generar.</p><pre style="white-space:pre-wrap">{msg}</pre>',
+             "El informe diario no se ha podido generar.\n\n" + a.notify_failure)
+        return
+
+    if a.auto:
+        today = dt.datetime.now(TZ).date()
+        day = today - dt.timedelta(days=1) if a.day == "yesterday" else today if a.day == "today" else dt.date.fromisoformat(a.day)
+        data = collect(day)
+        sug = sugerencias_auto(data)
+        html_body, text_body = render(data, sug, a.nota), render_text(data, sug)
+        base = a.out or os.path.join(ROOT, ".ads-reports", day.isoformat())
+        os.makedirs(os.path.dirname(base), exist_ok=True)
+        json.dump(data, open(base + ".json", "w"), ensure_ascii=False, indent=1)
+        json.dump(sug, open(base + ".sugerencias.json", "w"), ensure_ascii=False, indent=1)
+        open(base + ".html", "w").write(html_body)
+        open(base + ".txt", "w").write(text_body)
+        print(f"OK {base}.html · sugerencias: " + " | ".join(x["titulo"] for x in sug))
+        if a.send:
+            d = dt.date.fromisoformat(data["dia"])
+            send([x.strip() for x in a.to.split(",") if x.strip()],
+                 f'Informe Google Ads · Universo Hostelería · {d.day} de {MESES[d.month - 1]}', html_body, text_body)
+        return
 
     if a.render:
         data = json.load(open(a.render + ".json"))
