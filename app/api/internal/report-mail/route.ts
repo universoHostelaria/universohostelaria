@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server'
 // Autorización: la clave service_role de Supabase en "Authorization: Bearer …".
 // Se valida contra Supabase (endpoint de admin), así no hace falta otro secreto en Vercel.
 // Solo envía a destinatarios de esta lista.
-const ALLOWED_TO = new Set(['lucas.carmo@flowcode.cc', 'kanto.kontato@gmail.com'])
+const ALLOWED_TO = new Set(['lucas.carmo@flowcode.cc', 'hugo.carmo@flowcode.cc'])
 
 async function isServiceRole(key: string) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL

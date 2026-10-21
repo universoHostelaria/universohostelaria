@@ -32,7 +32,7 @@ jobs:
       GOOGLE_ADS_REFRESH_TOKEN: ${{ secrets.GOOGLE_ADS_REFRESH_TOKEN }}
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
-      REPORT_TO: ${{ inputs.to != '' && inputs.to || 'lucas.carmo@flowcode.cc,kanto.kontato@gmail.com' }}
+      REPORT_TO: ${{ inputs.to != '' && inputs.to || 'lucas.carmo@flowcode.cc,hugo.carmo@flowcode.cc' }}
       REPORT_DAY: ${{ inputs.day != '' && inputs.day || 'yesterday' }}
     steps:
       - uses: actions/checkout@v4
