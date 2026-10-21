@@ -106,17 +106,27 @@ def metrics_block(rows):
 
 
 # ── pedidos de la web (Supabase) ─────────────────────────────────────
+TEST_WORDS = {"teste", "test", "prueba", "testing"}
+
+
+def is_test_order(r):
+    """Pruebas internas: email del equipo o nombres/emails tipo «teste», «test», «prueba»."""
+    email = str(r.get("contacto_email") or "").lower().strip()
+    if email.endswith("@flowcode.cc") or email.split("@")[0] in TEST_WORDS:
+        return True
+    return any(str(r.get(k) or "").lower().strip() in TEST_WORDS for k in ("empresa_nombre", "contacto_nombre"))
+
 def orders(since_utc, until_utc):
     url, key = env("NEXT_PUBLIC_SUPABASE_URL"), env("SUPABASE_SERVICE_KEY")
     q = urllib.parse.urlencode([
-        ("select", "created_at,items,total_estimado,contacto_email"),
+        ("select", "created_at,items,total_estimado,contacto_email,contacto_nombre,empresa_nombre"),
         ("created_at", f"gte.{since_utc}"), ("created_at", f"lt.{until_utc}"),
         ("order", "created_at.asc"),
     ])
     req = urllib.request.Request(f"{url}/rest/v1/orders?{q}", headers={"apikey": key, "Authorization": f"Bearer {key}"})
     rows = json.load(urllib.request.urlopen(req))
     # Fuera pruebas internas; sin datos personales en el informe
-    rows = [r for r in rows if not str(r.get("contacto_email", "")).lower().endswith("@flowcode.cc")]
+    rows = [r for r in rows if not is_test_order(r)]
     return [{"fecha": r["created_at"][:16].replace("T", " "), "productos": [f'{i.get("name")} × {i.get("qty")}' for i in r.get("items") or []],
              "total_sin_iva": r.get("total_estimado")} for r in rows]
 
@@ -304,7 +314,12 @@ def headline(data):
     if not dm["impresiones"]:
         return "Ayer el anuncio no se mostró."
     partes = [f'{num(dm["clics"])} {"clic" if dm["clics"] == 1 else "clics"} por {money(dm["coste"])}']
-    partes.append("sin solicitudes en la web todavía" if not ped else f'{ped} {"solicitud" if ped == 1 else "solicitudes"} en la web')
+    if ped:
+        partes.append(f'{ped} {"solicitud" if ped == 1 else "solicitudes"} en la web')
+    elif data.get("pedidos_web_acumulado"):
+        partes.append("ninguna solicitud en la web ese día")
+    else:
+        partes.append("sin solicitudes en la web todavía")
     return f'{partes[0]}, {partes[1]}.'
 
 
