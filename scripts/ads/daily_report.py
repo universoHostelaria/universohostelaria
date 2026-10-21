@@ -517,7 +517,9 @@ def sugerencias_auto(data):
     cpc_max = data.get("cpc_maximo")
 
     # 1) Contactos
-    if solicitudes or contactos:
+    tipos_all = data.get("contactos_por_tipo") or {}
+    reales = sum(v for k, v in tipos_all.items() if k != "Clicks to call")  # el clic en llamar no garantiza llamada
+    if solicitudes or reales:
         SING = {"WhatsApp": ("clic en WhatsApp", "clics en WhatsApp"), "Clic en llamar": ("clic en el botón de llamar del anuncio (no garantiza que la llamada se hiciera)", "clics en el botón de llamar del anuncio (no garantizan que la llamada se hiciera)"),
                 "Formulario web": ("formulario enviado", "formularios enviados"), "Formulario del anuncio": ("formulario del anuncio", "formularios del anuncio"),
                 "Cómo llegar": ("consulta de cómo llegar", "consultas de cómo llegar")}
@@ -527,8 +529,10 @@ def sugerencias_auto(data):
         out.append((1, "Hay contactos: hay que responder rápido.",
                     'Desde el lanzamiento: ' + " y ".join(partes) + '. Responder en menos de una hora multiplica las opciones de venta.'))
     elif ac["clics"] >= 50:
+        llamar = tipos_all.get("Clicks to call", 0)
+        extra = f' (solo {llamar:g} clic en el botón de llamar, que no garantiza una llamada)' if llamar else ''
         out.append((1, "Muchos clics y aún ningún contacto.",
-                    f'{num(ac["clics"])} clics desde el lanzamiento sin solicitudes ni contactos registrados. Conviene revisar la página a la que llega '
+                    f'{num(ac["clics"])} clics desde el lanzamiento sin solicitudes ni mensajes registrados{extra}. Conviene revisar la página a la que llega '
                     'cada anuncio (más fotos, precio claro y botón de WhatsApp visible) y simplificar el formulario de pedido.'))
 
     # 2) Presupuesto vs posición
