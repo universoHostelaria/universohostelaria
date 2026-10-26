@@ -46,7 +46,7 @@ AD_GROUPS = [
         "headlines": [
             "Sillas para Hostelería",
             "Sillas para Bar y Restaurante",
-            "Desde 38,96 € IVA Incluido",
+            "Desde 36,18 € IVA Incluido",
             "Sillas Apilables Resistentes",
             "Polipropileno Reforzado",
             "Precio Directo de Fábrica",
@@ -79,7 +79,7 @@ AD_GROUPS = [
         "headlines": [
             "Mesas para Hostelería",
             "Mesas para Bar y Restaurante",
-            "Desde 98,25 € IVA Incluido",
+            "Desde 91,23 € IVA Incluido",
             "Redondas o Cuadradas",
             "Melamina, Compact o Werzalit",
             "Elige Acabado y Medida",
@@ -145,8 +145,8 @@ NEGATIVES = [
 
 SITELINKS = [
     ("Ver Catálogo", "Todos nuestros productos", "Precios con IVA incluido", "/catalog"),
-    ("Mesas de Bar", "Todos los acabados y medidas", "Mesa 3020 desde 98,25 €", "/product/RM1825"),
-    ("Sillas de Hostelería", "Apilables y resistentes", "Desde 38,96 €", "/catalog?category=Sillas"),
+    ("Mesas de Bar", "Todos los acabados y medidas", "Mesa 3020 desde 91,23 €", "/product/RM1825"),
+    ("Sillas de Hostelería", "Apilables y resistentes", "Desde 36,18 €", "/catalog?category=Sillas"),
     ("Sillones y Butacas", "Para hoteles y restaurantes", "Madera maciza y tapizados", "/catalog?category=Sillones"),
 ]
 CALLOUTS = [

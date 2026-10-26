@@ -41,15 +41,15 @@ const MESA_3020: VariantGrid = {
     { key: 'compactp', label: 'Compact P.', desc: 'HPL premium' },
     { key: 'chapado', label: 'Chapado', desc: 'Madera natural' },
   ],
-  // Precio de venta sin IVA = tarifa Romero × 0,70 (−30 %, regla acordada con el cliente, sept. 2026)
+  // Precio de venta sin IVA = tarifa Romero × 0,65 (−35 %, acordado con el cliente el 26/10/2026)
   prices: {
-    'Ø60':   { melamina: 98,    werzalit: 100.8, compactb: 130.9, compactp: 134.4, chapado: 144.9 },
-    'Ø70':   { melamina: 103.6, werzalit: 105,   compactb: 144.2, compactp: 154,   chapado: 157.5 },
-    'Ø80':   { melamina: null,  werzalit: null,  compactb: 171.5, compactp: 175,   chapado: 185.5 },
-    '60×60': { melamina: 81.2,  werzalit: 114.8, compactb: 125.3, compactp: 128.8, chapado: 115.5 },
-    '70×70': { melamina: 87.5,  werzalit: 129.5, compactb: 138.6, compactp: 148.4, chapado: 129.5 },
-    '80×80': { melamina: 95.9,  werzalit: 137.2, compactb: 165.9, compactp: 169.4, chapado: 149.1 },
-    '90×90': { melamina: 104.3, werzalit: null,  compactb: 252.7, compactp: 261.8, chapado: null },
+    'Ø60':   { melamina: 91, werzalit: 93.6, compactb: 121.55, compactp: 124.8, chapado: 134.55 },
+    'Ø70':   { melamina: 96.2, werzalit: 97.5, compactb: 133.9, compactp: 143, chapado: 146.25 },
+    'Ø80':   { melamina: null, werzalit: null, compactb: 159.25, compactp: 162.5, chapado: 172.25 },
+    '60×60': { melamina: 75.4, werzalit: 106.6, compactb: 116.35, compactp: 119.6, chapado: 107.25 },
+    '70×70': { melamina: 81.25, werzalit: 120.25, compactb: 128.7, compactp: 137.8, chapado: 120.25 },
+    '80×80': { melamina: 89.05, werzalit: 127.4, compactb: 154.05, compactp: 157.3, chapado: 138.45 },
+    '90×90': { melamina: 96.85, werzalit: null, compactb: 234.65, compactp: 243.1, chapado: null },
   },
   defaultSize: '60×60',
   defaultFinish: 'melamina',
