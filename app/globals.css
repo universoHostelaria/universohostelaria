@@ -70,3 +70,7 @@ body {
   .section { padding: 56px 20px; }
   .section-sm { padding: 32px 20px; }
 }
+
+/* Crédito FlowCode en el pie */
+.fc-credit:hover img{opacity:1!important}
+.fc-credit:hover{color:rgba(255,255,255,.75)!important}

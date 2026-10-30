@@ -2,6 +2,7 @@
 import './homepage.css'
 import ProductShowcase from '@/components/ui/ProductShowcase'
 import HeroTilt from '@/components/ui/HeroTilt'
+import FlowcodeCredit from '@/components/layout/FlowcodeCredit'
 import { getHomeContent } from '@/lib/home-content-server'
 import { supabase, type Product } from '@/lib/supabase'
 
@@ -302,7 +303,7 @@ export default async function HomePage() {
         </div>
         <div className="fb">
           <span>{c.footer.copyright}</span>
-          <span>{c.footer.tagline}</span>
+          <FlowcodeCredit />
         </div>
       </footer>
     </>

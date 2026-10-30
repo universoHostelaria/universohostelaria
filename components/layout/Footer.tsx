@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import styles from './Footer.module.css'
+import FlowcodeCredit from './FlowcodeCredit'
 
 export default function Footer() {
   return (
@@ -15,7 +16,7 @@ export default function Footer() {
             <span>📍</span> Barcelona, España
           </div>
           <div className={styles.contact}>
-            <span>✉️</span> hola@universohosteleria.es
+            <span>✉️</span> <a href="mailto:uh.dev@flowcode.cc" style={{ color: 'inherit' }}>uh.dev@flowcode.cc</a>
           </div>
         </div>
         <div>
@@ -40,7 +41,7 @@ export default function Footer() {
           <div className={styles.colLabel}>Soporte</div>
           <ul className={styles.links}>
             <li><Link href="/#especialista">Hablar con un especialista</Link></li>
-            <li><Link href="mailto:hola@universohosteleria.es">Contacto</Link></li>
+            <li><Link href="mailto:uh.dev@flowcode.cc">Contacto</Link></li>
             <li><Link href="/legal">Aviso legal</Link></li>
             <li><Link href="/privacidad">Privacidad</Link></li>
           </ul>
@@ -48,7 +49,7 @@ export default function Footer() {
       </div>
       <div className={styles.bottom}>
         <span>© {new Date().getFullYear()} Universo Hostelería · Barcelona</span>
-        <span>El mayor marketplace de mobiliario para hostelería en España</span>
+        <FlowcodeCredit />
       </div>
     </footer>
   )
