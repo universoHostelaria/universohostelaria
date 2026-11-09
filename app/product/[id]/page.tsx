@@ -9,7 +9,7 @@ import ProductActions from '@/components/ui/ProductActions'
 import ProductGallery from './ProductGallery'
 import ProductVariants from '@/components/ui/ProductVariants'
 import { getVariants, normalizeGrid } from '@/lib/variants'
-import { SITE_URL, supplierName as supplierLabel } from '@/lib/seo'
+import { SITE_URL, SITE_NAME } from '@/lib/seo'
 import styles from './product.module.css'
 
 export const revalidate = 3600
@@ -26,7 +26,7 @@ function productDescription(p: {
     p.material ? `de ${p.material}` : '',
     'para hostelería.',
     p.uso ? `Uso ${p.uso.toLowerCase()}.` : '',
-    `Mobiliario profesional para bares, restaurantes y hoteles, de ${supplierLabel(p.supplier_id)}.`,
+    'Mobiliario profesional para bares, restaurantes y hoteles.',
     'Precio directo de fábrica y entrega en toda España.',
   ]
     .filter(Boolean)
@@ -39,7 +39,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { data } = await getProduct(params.id)
   if (!data) return { title: 'Producto no encontrado' }
 
-  const supplier = supplierLabel(data.supplier_id)
   const description = productDescription(data)
   const url = `/product/${data.id}`
   const images = data.img_url
@@ -51,7 +50,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description,
     alternates: { canonical: url },
     openGraph: {
-      title: `${data.name} — ${supplier}`,
+      title: `${data.name} — ${SITE_NAME}`,
       description,
       url,
       type: 'website',
@@ -78,18 +77,12 @@ export default async function ProductPage({ params }: Props) {
 
   if (!product) notFound()
 
-  const supplierName =
-    product.supplier_id === 'tilia_romero' ? 'Tilia · Romero' :
-    product.supplier_id === 'arkimueble'   ? 'Arkimueble' :
-    product.supplier_id === 'romero'       ? 'Romero' : 'Universo Hostelería'
-
   const specs = [
     { key: 'Dimensiones', val: product.dimensions_raw, sub: 'Alto × Ancho × Profundo (cm)' },
     { key: 'Peso', val: product.weight_kg, sub: 'Por unidad sin embalaje' },
     { key: 'Material', val: product.material, sub: '' },
     { key: 'Uso', val: product.uso, sub: 'Apto para hostelería' },
     product.catas_certified ? { key: 'Certificación', val: 'CATAS', sub: 'Testado para uso profesional' } : null,
-    { key: 'Fabricante', val: supplierName, sub: '+15 años en hostelería' },
     product.cod_interno ? { key: 'Código interno', val: product.cod_interno, sub: '' } : null,
     product.modelo ? { key: 'Modelo', val: product.modelo, sub: '' } : null,
   ].filter(Boolean) as {key:string;val:string|null;sub:string}[]
@@ -113,7 +106,7 @@ export default async function ProductPage({ params }: Props) {
     sku: product.cod_interno ?? product.id,
     mpn: product.cod_comercial ?? undefined,
     material: product.material ?? undefined,
-    brand: { '@type': 'Brand', name: supplierName },
+    brand: { '@type': 'Brand', name: SITE_NAME },
     ...(product.price
       ? {
           offers: {
@@ -169,7 +162,7 @@ export default async function ProductPage({ params }: Props) {
 
         {/* Info panel */}
         <div className={styles.infoPanel}>
-          <div className={styles.supplier}>{supplierName}</div>
+          {product.category && <div className={styles.supplier}>{product.category}</div>}
           <h1 className={styles.productTitle}>{product.name}</h1>
           {product.cod_interno && <div className={styles.ref}>Ref. {product.cod_interno}</div>}
 

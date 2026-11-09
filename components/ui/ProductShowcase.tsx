@@ -5,7 +5,6 @@ import { useState } from 'react'
 import type { Product } from '@/lib/supabase'
 import type { ShowcaseItem } from '@/lib/home-content'
 import { priceConIva, formatEUR } from '@/lib/price'
-import { supplierName } from '@/lib/seo'
 import { getVariants, normalizeGrid } from '@/lib/variants'
 import { useCart } from './CartContext'
 import styles from './ProductShowcase.module.css'
@@ -46,7 +45,7 @@ export default function ProductShowcase({ entries }: { entries: Entry[] }) {
             </div>
 
             <div className={styles.body}>
-              {p.supplier_id && <div className={styles.supplier}>{supplierName(p.supplier_id)}</div>}
+              {p.category && <div className={styles.supplier}>{p.category}</div>}
               <h3 className={styles.name}>{p.name}</h3>
               {item.tagline && <p className={styles.tagline}>{item.tagline}</p>}
               <div className={styles.foot}>

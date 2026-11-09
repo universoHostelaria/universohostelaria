@@ -11,10 +11,6 @@ export default function AddToCartModal({ product: p, onClose }: Props) {
   const { addItem } = useCart()
   const [qty, setQty] = useState(1)
 
-  const supplierName =
-    p.supplier_id === 'tilia_romero' ? 'Tilia · Romero' :
-    p.supplier_id === 'arkimueble'   ? 'Arkimueble' : 'Romero'
-
   const handleAdd = () => {
     addItem(p, qty)
     onClose()
@@ -40,7 +36,7 @@ export default function AddToCartModal({ product: p, onClose }: Props) {
             </div>
           )}
           <div className={styles.info}>
-            <div className={styles.supplier}>{supplierName}</div>
+            {p.category && <div className={styles.supplier}>{p.category}</div>}
             <div className={styles.name}>{p.name}</div>
             {p.dimensions_raw && <div className={styles.dims}>{p.dimensions_raw}</div>}
           </div>

@@ -13,11 +13,6 @@ export default function ProductCard({ product: p, view = 'grid' }: Props) {
   const isListView = view === 'list'
   const [showModal, setShowModal] = useState(false)
 
-  const supplierName =
-    p.supplier_id === 'tilia_romero' ? 'Tilia · Romero' :
-    p.supplier_id === 'arkimueble'   ? 'Arkimueble' :
-    p.supplier_id === 'romero'       ? 'Romero' : 'Universo Hostelería'
-
   return (
     <>
       <Link href={`/product/${p.id}`} className={`${styles.card} ${isListView ? styles.listView : ''}`}>
@@ -43,7 +38,7 @@ export default function ProductCard({ product: p, view = 'grid' }: Props) {
           </div>
         </div>
         <div className={styles.info}>
-          <div className={styles.supplier}>{supplierName}</div>
+          {p.category && <div className={styles.supplier}>{p.category}</div>}
           <div className={styles.name}>{p.name}</div>
           <div className={styles.dims}>{isListView ? `${p.category} · ${p.material} · ${p.dimensions_raw || '—'}` : (p.dimensions_raw || p.category)}</div>
           <div className={styles.footer}>

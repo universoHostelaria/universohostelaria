@@ -251,6 +251,7 @@ export default async function HomePage() {
       )}
 
       {/* SUPPLIERS */}
+      {c.suppliers.show && (
       <div className="sup-bar" style={{ marginTop: '80px' }}>
         <div className="sup-w">
           <span className="sup-label">{c.suppliers.label}</span>
@@ -265,6 +266,7 @@ export default async function HomePage() {
           <a href={c.suppliers.ctaHref} className="btn btn-ol" style={{ fontSize: '13px', flexShrink: '0' }}>{c.suppliers.ctaLabel}</a>
         </div>
       </div>
+      )}
 
       {/* HOW */}
       <div className="sec">

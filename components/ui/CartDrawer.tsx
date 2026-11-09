@@ -15,10 +15,6 @@ export default function CartDrawer() {
   const solicitud = showSolicitud ? <SolicitudModal onClose={() => setShowSolicitud(false)} /> : null
   if (!isOpen) return solicitud
 
-  const supplierName = (id: string) =>
-    id === 'tilia_romero' ? 'Tilia · Romero' :
-    id === 'arkimueble'   ? 'Arkimueble' : 'Romero'
-
   return (
     <>
       <div className={styles.overlay} onClick={closeCart} />
@@ -70,7 +66,7 @@ export default function CartDrawer() {
                   }
                 </div>
                 <div className={styles.itemInfo}>
-                  <div className={styles.itemSupplier}>{supplierName(item.product.supplier_id)}</div>
+                  {item.product.category && <div className={styles.itemSupplier}>{item.product.category}</div>}
                   <div className={styles.itemName}>{item.product.name}</div>
                   {priceConIva(item.product.price) ? (
                     <div className={styles.itemPrice}>

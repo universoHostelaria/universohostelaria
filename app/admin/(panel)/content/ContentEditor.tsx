@@ -243,6 +243,10 @@ export default function ContentEditor({ initial }: { initial: HomeContent }) {
 
       {/* SUPPLIERS */}
       <Section title="Fabricantes (barra)">
+        <label className="adm-check" style={{ marginBottom: 14 }}>
+          <input type="checkbox" checked={c.suppliers.show} onChange={(e) => patch((d) => { d.suppliers.show = e.target.checked })} />
+          Mostrar esta barra en la home (los nombres de fabricantes quedan a la vista)
+        </label>
         <Row>
           <Text label="Etiqueta" v={c.suppliers.label} on={(v) => patch((d) => { d.suppliers.label = v })} />
           <Text label="Botón — texto" v={c.suppliers.ctaLabel} on={(v) => patch((d) => { d.suppliers.ctaLabel = v })} />

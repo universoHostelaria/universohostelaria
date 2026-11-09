@@ -186,7 +186,7 @@ export default function SolicitudModal({ onClose }: Props) {
                     <img src={i.product.img_url} alt={i.product.name} className={styles.confirmImg} />
                   )}
                   <div className={styles.confirmInfo}>
-                    <div className={styles.confirmSupplier}>{supplierName(i.product.supplier_id)}</div>
+                    {i.product.category && <div className={styles.confirmSupplier}>{i.product.category}</div>}
                     <div className={styles.confirmName}>{i.product.name}</div>
                     <div className={styles.confirmQty}>{i.quantity} ud</div>
                   </div>

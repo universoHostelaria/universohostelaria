@@ -40,7 +40,7 @@ export type HomeContent = {
   split: { image: string; eyebrow: string; titleHtml: string; text: string; ctaLabel: string; ctaHref: string }
   specialist: { image: string; tag: string; titleHtml: string; text: string; features: string[]; ctaLabel: string }
   break2Image: string
-  suppliers: { label: string; items: SupItem[]; ctaLabel: string; ctaHref: string }
+  suppliers: { show: boolean; label: string; items: SupItem[]; ctaLabel: string; ctaHref: string }
   how: { eyebrow: string; titleHtml: string; steps: Step[] }
   footer: {
     name: string
@@ -183,6 +183,7 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
   },
   break2Image: '',
   suppliers: {
+    show: false,
     label: 'NUESTROS FABRICANTES',
     items: [
       { badge: 'T', name: 'Tilia', href: '/catalog' },
