@@ -60,7 +60,7 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
   seo: {
     title: 'Universo Hostelería — Mobiliario profesional para hostelería',
     description:
-      'El mayor marketplace de mobiliario para hostelería en España. 15+ fabricantes, 10.000+ productos.',
+      'El mayor marketplace de mobiliario para hostelería en España. 15+ fabricantes y, en breve, más de 10.000 productos.',
   },
   whatsappUrl: WA,
   logo: '',
@@ -72,12 +72,12 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
       { label: 'Exterior', href: '/catalog?uso=Exterior' },
       { label: 'Blog', href: '/blog' },
     ],
-    searchText: 'Buscar en 10.000+ productos…',
+    searchText: 'Buscar productos…',
   },
   announcement: {
     // Oculta por defecto (se puede activar desde el CMS)
     show: false,
-    textHtml: '<strong>Nuevo:</strong> 15+ fabricantes, 10.000+ productos en un solo lugar',
+    textHtml: '<strong>En breve:</strong> más de 10.000 productos de 15+ fabricantes en un solo lugar',
     linkLabel: 'Habla hoy con nuestro especialista →',
   },
   hero: {
@@ -198,7 +198,7 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
     eyebrow: 'Proceso',
     titleHtml: '4 PASOS.<br /><span class="blue">TAN FÁCIL.</span>',
     steps: [
-      { num: '01', title: 'EXPLORA', desc: '10.000+ productos de 15+ fabricantes. Filtra, compara, guarda favoritos.' },
+      { num: '01', title: 'EXPLORA', desc: 'En breve, más de 10.000 productos de 15+ fabricantes. Filtra, compara, guarda favoritos.' },
       { num: '02', title: 'HABLA CON EL ESPECIALISTA', desc: 'Cita gratuita para afinar plazos, colores y cantidades.' },
       { num: '03', title: 'CONFIRMA EL PEDIDO', desc: 'Factura proforma directa al fabricante. Sin sorpresas.' },
       { num: '04', title: 'RECIBE EN TU LOCAL', desc: 'Entrega coordinada en toda España. Te acompañamos hasta el final.' },
@@ -206,7 +206,7 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
   },
   footer: {
     name: 'Universo Hostelería',
-    desc: 'El mayor marketplace de mobiliario para hostelería en España. 15+ fabricantes, 10.000+ productos, un especialista para ti.',
+    desc: 'El mayor marketplace de mobiliario para hostelería en España. 15+ fabricantes y, en breve, más de 10.000 productos. Un especialista para ti.',
     location: 'Barcelona, España',
     email: 'uh.dev@flowcode.cc',
     cols: [

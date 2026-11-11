@@ -94,7 +94,7 @@ export default function CatalogClient({ filterOptions }: { filterOptions: Filter
       <div className={styles.header}>
         <div>
           <div className="eyebrow">Todo el catálogo</div>
-          <h1 className={styles.h1}>MÁS DE <span>10.000</span><br/>PRODUCTOS.</h1>
+          <h1 className={styles.h1}>EN BREVE, MÁS DE <span>10.000</span><br/>PRODUCTOS.</h1>
         </div>
         <div className={styles.resultCount}>
           Mostrando <strong>{loading ? '…' : total}</strong> productos

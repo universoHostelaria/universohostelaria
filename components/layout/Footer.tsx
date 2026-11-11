@@ -10,7 +10,7 @@ export default function Footer() {
           <div className={styles.brand}>Universo Hostelería</div>
           <p className={styles.desc}>
             El mayor marketplace de mobiliario para hostelería en España.
-            15+ fabricantes, 10.000+ productos, un especialista para ti.
+            15+ fabricantes y, en breve, más de 10.000 productos. Un especialista para ti.
           </p>
           <div className={styles.contact}>
             <span>📍</span> Barcelona, España
