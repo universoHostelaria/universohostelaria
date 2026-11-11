@@ -1,0 +1,46 @@
+.banner {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  z-index: 550;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 380px;
+  padding: 8px 8px 8px 14px;
+  background: rgba(17, 17, 17, .92);
+  color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .18);
+  font-size: 12.5px;
+  line-height: 1.35;
+}
+.text { margin: 0; flex: 1; opacity: .85; }
+.accept {
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 8px;
+  padding: 7px 12px;
+  background: #fff;
+  color: #111;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.close {
+  flex-shrink: 0;
+  border: 0;
+  background: none;
+  color: #fff;
+  opacity: .55;
+  font-size: 18px;
+  line-height: 1;
+  padding: 4px 6px;
+  cursor: pointer;
+}
+.close:hover { opacity: .9; }
+
+/* En móvil deja libre el botón del carrito (abajo a la derecha) */
+@media (max-width: 640px) {
+  .banner { left: 12px; right: 92px; bottom: 16px; max-width: none; }
+}
