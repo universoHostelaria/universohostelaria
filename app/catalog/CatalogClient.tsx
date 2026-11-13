@@ -1,6 +1,5 @@
 'use client'
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import type { Product } from '@/lib/supabase'
@@ -8,29 +7,27 @@ import ProductCard from '@/components/ui/ProductCard'
 import styles from './catalog.module.css'
 
 type FilterOptions = { categories: string[]; uses: string[]; materials: string[] }
+// Primera página ya resuelta en el servidor (filtros de la URL), para que el
+// visitante —y Google— vea los productos sin esperar al JavaScript.
+export type CatalogInitial = { category: string; uso: string; search: string; products: Product[]; total: number }
 
 const PER_PAGE = 24
 
-export default function CatalogClient({ filterOptions }: { filterOptions: FilterOptions }) {
-  const [products, setProducts] = useState<Product[]>([])
-  const [total, setTotal]       = useState(0)
+export default function CatalogClient({ filterOptions, initial }: { filterOptions: FilterOptions; initial: CatalogInitial }) {
+  const [products, setProducts] = useState<Product[]>(initial.products)
+  const [total, setTotal]       = useState(initial.total)
   const [page, setPage]         = useState(1)
-  const [loading, setLoading]   = useState(true)
+  const [loading, setLoading]   = useState(false)
   const [view, setView]         = useState<4|2|'list'>(4)
 
   // Filtros — inicializados a partir de los parámetros de la URL
   // (p.ej. /catalog?category=Sillas&uso=Exterior desde el menú/home).
-  const searchParams = useSearchParams()
-  const [selCat,  setSelCat]  = useState<string[]>(() => {
-    const v = searchParams.get('category'); return v ? [v] : []
-  })
-  const [selUso,  setSelUso]  = useState<string[]>(() => {
-    const v = searchParams.get('uso'); return v ? [v] : []
-  })
+  const [selCat,  setSelCat]  = useState<string[]>(initial.category ? [initial.category] : [])
+  const [selUso,  setSelUso]  = useState<string[]>(initial.uso ? [initial.uso] : [])
   const [selMat,  setSelMat]  = useState<string[]>([])
   const [isNew,   setIsNew]   = useState(false)
   const [priceMax,setPriceMax]= useState<number|null>(null)
-  const [search,  setSearch]  = useState(() => searchParams.get('search') ?? searchParams.get('q') ?? '')
+  const [search,  setSearch]  = useState(initial.search)
   const [sort,    setSort]    = useState('name')
   const [openDD,  setOpenDD]  = useState<string|null>(null)
 
@@ -61,7 +58,12 @@ export default function CatalogClient({ filterOptions }: { filterOptions: Filter
     setLoading(false)
   }, [selCat, selUso, selMat, isNew, priceMax, search, sort, page])
 
-  useEffect(() => { fetchProducts() }, [fetchProducts])
+  // La primera página llega del servidor; solo se consulta al cambiar filtros.
+  const firstRun = useRef(true)
+  useEffect(() => {
+    if (firstRun.current) { firstRun.current = false; return }
+    fetchProducts()
+  }, [fetchProducts])
 
   // Reset page on filter change
   const resetPage = () => setPage(1)
@@ -93,8 +95,18 @@ export default function CatalogClient({ filterOptions }: { filterOptions: Filter
       {/* Header */}
       <div className={styles.header}>
         <div>
-          <div className="eyebrow">Todo el catálogo</div>
-          <h1 className={styles.h1}>EN BREVE, MÁS DE <span>10.000</span><br/>PRODUCTOS.</h1>
+          {/* Con una sola categoría (como llegan los anuncios) el título repite la búsqueda */}
+          {selCat.length === 1 ? (
+            <>
+              <div className="eyebrow">Precios con IVA · Envío a toda España</div>
+              <h1 className={styles.h1}>{selCat[0].toUpperCase()} <span>PARA HOSTELERÍA.</span></h1>
+            </>
+          ) : (
+            <>
+              <div className="eyebrow">Todo el catálogo</div>
+              <h1 className={styles.h1}>EN BREVE, MÁS DE <span>10.000</span><br/>PRODUCTOS.</h1>
+            </>
+          )}
         </div>
         <div className={styles.resultCount}>
           Mostrando <strong>{loading ? '…' : total}</strong> productos

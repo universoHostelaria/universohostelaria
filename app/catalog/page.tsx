@@ -1,5 +1,4 @@
-import { Suspense } from 'react'
-import { getFilterOptions } from '@/lib/supabase'
+import { getFilterOptions, getProducts } from '@/lib/supabase'
 import CatalogClient from './CatalogClient'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
@@ -17,16 +16,26 @@ export const metadata = {
     type: 'website',
   },
 }
-export const revalidate = 3600
+export const revalidate = 60
 
-export default async function CatalogPage() {
-  const filters = await getFilterOptions()
+type Props = { searchParams: Record<string, string | string[] | undefined> }
+const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v) ?? ''
+
+export default async function CatalogPage({ searchParams }: Props) {
+  const category = one(searchParams.category)
+  const uso = one(searchParams.uso)
+  const search = one(searchParams.search) || one(searchParams.q)
+  const [filters, { data, count }] = await Promise.all([
+    getFilterOptions(),
+    getProducts({ category: category ? [category] : [], uso: uso ? [uso] : [], search }),
+  ])
   return (
     <>
       <Navbar />
-      <Suspense fallback={<div style={{padding:'80px 32px',textAlign:'center',color:'#AAA'}}>Cargando catálogo…</div>}>
-        <CatalogClient filterOptions={filters} />
-      </Suspense>
+      <CatalogClient
+        filterOptions={filters}
+        initial={{ category, uso, search, products: data ?? [], total: count ?? 0 }}
+      />
       <Footer />
     </>
   )

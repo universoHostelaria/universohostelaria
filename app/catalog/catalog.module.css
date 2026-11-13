@@ -15,6 +15,11 @@
   font-size: clamp(36px, 4vw, 54px); line-height: .96; letter-spacing: .02em; color: #0D0D0D;
 }
 .h1 span { color: #2B6FD4; }
+@media (max-width: 768px) {
+  .bc { padding-top: 10px; padding-bottom: 8px; }
+  .header { padding-bottom: 16px; gap: 6px; }
+  .h1 { font-size: 34px; }
+}
 .resultCount { font-size: 13px; color: #AAAAAA; padding-bottom: 6px; }
 
 /* FILTER BAR */
