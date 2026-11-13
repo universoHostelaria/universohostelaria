@@ -4,6 +4,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { Product } from '@/lib/supabase'
 import { priceConIva, formatEUR } from '@/lib/price'
+import { trackWhatsApp } from '@/lib/analytics'
+import { waProductUrl } from '@/lib/whatsapp'
 import AddToCartModal from './AddToCartModal'
 import styles from './ProductCard.module.css'
 
@@ -42,17 +44,31 @@ export default function ProductCard({ product: p, view = 'grid' }: Props) {
           <div className={styles.name}>{p.name}</div>
           <div className={styles.dims}>{isListView ? `${p.category} · ${p.material} · ${p.dimensions_raw || '—'}` : (p.dimensions_raw || p.category)}</div>
           <div className={styles.footer}>
-            <div>
-              <div className={styles.price}>{priceConIva(p.price) ? formatEUR(priceConIva(p.price)!) : p.price_display}</div>
+            <div className={styles.priceWrap}>
+              <div className={priceConIva(p.price) ? styles.price : styles.priceAsk}>{priceConIva(p.price) ? formatEUR(priceConIva(p.price)!) : p.price_display}</div>
               <div className={styles.priceNote}>{priceConIva(p.price) ? 'IVA incluido' : ''}</div>
             </div>
-            <button className={styles.addBtn}
-              onClick={e => { e.preventDefault(); e.stopPropagation(); setShowModal(true) }}
-              aria-label="Añadir al pedido">
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                <path d="M8 3v10M3 8h10" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
-              </svg>
-            </button>
+            <div className={styles.actions}>
+              {/* Dentro del <Link> de la tarjeta no puede ir otro <a>: botón que abre WhatsApp */}
+              <button className={styles.waBtn}
+                onClick={e => {
+                  e.preventDefault(); e.stopPropagation()
+                  trackWhatsApp(location.pathname)
+                  window.open(waProductUrl(p), '_blank', 'noopener')
+                }}
+                aria-label="Pedir presupuesto por WhatsApp" title="Pedir presupuesto por WhatsApp">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+                  <path d="M17.5 14.4c-.3-.1-1.8-.9-2-1s-.5-.1-.7.1-.8 1-1 1.2-.4.2-.7.1a8.2 8.2 0 0 1-4-3.5c-.3-.5.3-.5.9-1.6.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6a1.2 1.2 0 0 0-.8.4 3.5 3.5 0 0 0-1.1 2.6 6 6 0 0 0 1.3 3.2 13.8 13.8 0 0 0 5.3 4.7c2 .8 2.7.9 3.7.7a3.1 3.1 0 0 0 2-1.4 2.5 2.5 0 0 0 .2-1.4c-.1-.1-.3-.2-.6-.3zM12 21.8a9.8 9.8 0 0 1-5-1.4l-.4-.2-3.7 1 1-3.6-.2-.4A9.8 9.8 0 1 1 12 21.8zm8.4-18.2A11.8 11.8 0 0 0 1.8 17.8L.1 24l6.3-1.7a11.8 11.8 0 0 0 5.6 1.4A11.8 11.8 0 0 0 20.4 3.6z"/>
+                </svg>
+              </button>
+              <button className={styles.addBtn}
+                onClick={e => { e.preventDefault(); e.stopPropagation(); setShowModal(true) }}
+                aria-label="Añadir al pedido">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                  <path d="M8 3v10M3 8h10" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </Link>

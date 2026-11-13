@@ -11,23 +11,25 @@ const supabase = createClient(
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
+    let { empresa_nombre, contacto_email } = body
     const {
-      empresa_nombre,
       empresa_cif,
       empresa_direccion,
       empresa_ciudad,
       empresa_cp,
       contacto_nombre,
-      contacto_email,
       contacto_telefono,
       items,
       notas,
     } = body
 
-    // Validate required fields
-    if (!empresa_nombre || !contacto_nombre || !contacto_email || !items?.length) {
+    // Formulario corto: nombre + teléfono (o email). Empresa y email son opcionales.
+    if (!contacto_nombre || (!contacto_telefono && !contacto_email) || !items?.length) {
       return NextResponse.json({ error: 'Faltan campos obligatorios' }, { status: 400 })
     }
+    // Columnas NOT NULL en la tabla: se guardan vacías si no vienen
+    empresa_nombre = String(empresa_nombre ?? '').trim()
+    contacto_email = String(contacto_email ?? '').trim()
 
     // Calculate total
     const total_estimado = items.reduce(
@@ -79,14 +81,14 @@ NUEVA SOLICITUD DE PEDIDO — Universo Hostelería
 ================================================
 
 EMPRESA
-Nombre:    ${empresa_nombre}
+Nombre:    ${empresa_nombre || '—'}
 CIF/NIF:   ${empresa_cif || '—'}
 Dirección: ${empresa_direccion || '—'}
 Ciudad:    ${empresa_ciudad || '—'} ${empresa_cp || ''}
 
 RESPONSABLE
 Nombre:    ${contacto_nombre}
-Email:     ${contacto_email}
+Email:     ${contacto_email || '—'}
 Teléfono:  ${contacto_telefono || '—'}
 
 PRODUCTOS SOLICITADOS
@@ -128,7 +130,7 @@ Ver todas las solicitudes en el dashboard de Supabase.
   <div style="padding:24px 28px">
     <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px">
       <tr><td style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#AAAAAA;padding-bottom:10px">Empresa</td></tr>
-      <tr><td style="font-size:14px;color:#0D0D0D;padding:3px 0"><strong>${empresa_nombre}</strong></td></tr>
+      <tr><td style="font-size:14px;color:#0D0D0D;padding:3px 0"><strong>${empresa_nombre || '—'}</strong></td></tr>
       ${empresa_cif ? `<tr><td style="font-size:13px;color:#555;padding:2px 0">CIF/NIF: ${empresa_cif}</td></tr>` : ''}
       ${empresa_direccion ? `<tr><td style="font-size:13px;color:#555;padding:2px 0">${empresa_direccion}, ${empresa_ciudad || ''} ${empresa_cp || ''}</td></tr>` : ''}
     </table>
@@ -136,7 +138,7 @@ Ver todas las solicitudes en el dashboard de Supabase.
     <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px">
       <tr><td style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#AAAAAA;padding-bottom:10px">Responsable</td></tr>
       <tr><td style="font-size:14px;color:#0D0D0D;padding:3px 0"><strong>${contacto_nombre}</strong></td></tr>
-      <tr><td style="font-size:13px;color:#555;padding:2px 0">${contacto_email}${contacto_telefono ? ` · ${contacto_telefono}` : ''}</td></tr>
+      <tr><td style="font-size:13px;color:#555;padding:2px 0">${[contacto_telefono, contacto_email].filter(Boolean).join(' · ')}</td></tr>
     </table>
 
     <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#AAAAAA;padding-bottom:10px">Productos solicitados</div>
@@ -189,8 +191,8 @@ Ver todas las solicitudes en el dashboard de Supabase.
         body: JSON.stringify({
           from: 'Universo Hostelería <pedidos@universohosteleria.es>',
           to: [recipient],
-          reply_to: contacto_email,
-          subject: `${isTest ? '[TEST] ' : ''}Nueva solicitud: ${empresa_nombre} — ${items.length} producto${items.length > 1 ? 's' : ''}`,
+          ...(contacto_email ? { reply_to: contacto_email } : {}),
+          subject: `${isTest ? '[TEST] ' : ''}Nueva solicitud: ${empresa_nombre || contacto_nombre} — ${items.length} producto${items.length > 1 ? 's' : ''}`,
           html: emailHtml,
           text: emailBody,
         }),

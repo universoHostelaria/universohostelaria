@@ -155,6 +155,7 @@
   transition: all .2s;
 }
 .btnWa:hover { background: #1ebe5d; transform: translateY(-1px); }
+a.btnWa { text-decoration: none; margin-top: 10px; box-sizing: border-box; }
 
 .btnSolicitud {
   display: flex;
