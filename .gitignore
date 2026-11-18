@@ -36,3 +36,4 @@ next-env.d.ts
 
 # Informes diarios de Google Ads (histórico local)
 .ads-reports/
+.catalog-import/
