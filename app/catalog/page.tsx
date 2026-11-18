@@ -16,7 +16,10 @@ export const metadata = {
     type: 'website',
   },
 }
-export const revalidate = 60
+// Sin caché de datos: el catálogo cambia desde el CMS/importaciones y la caché
+// de fetch se quedaba con listas antiguas en las páginas con paginación.
+export const fetchCache = 'force-no-store'
+export const dynamic = 'force-dynamic'
 
 type Props = { searchParams: Record<string, string | string[] | undefined> }
 const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v) ?? ''
