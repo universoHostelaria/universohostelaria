@@ -16,6 +16,7 @@
   line-height: 1.35;
 }
 .text { margin: 0; flex: 1; opacity: .85; }
+.more { color: inherit; text-decoration: underline; text-underline-offset: 2px; white-space: nowrap; }
 .accept {
   flex-shrink: 0;
   border: 0;

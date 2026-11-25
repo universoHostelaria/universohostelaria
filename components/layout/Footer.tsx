@@ -42,8 +42,8 @@ export default function Footer() {
           <ul className={styles.links}>
             <li><Link href="/#especialista">Hablar con un especialista</Link></li>
             <li><Link href="mailto:hola@universohosteleria.es">Contacto</Link></li>
-            <li><Link href="/legal">Aviso legal</Link></li>
-            <li><Link href="/privacidad">Privacidad</Link></li>
+            <li><Link href="/privacidad#privacidad">Privacidad</Link></li>
+            <li><Link href="/privacidad#cookies">Cookies</Link></li>
           </ul>
         </div>
       </div>

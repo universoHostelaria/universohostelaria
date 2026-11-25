@@ -21,7 +21,7 @@ export default function CookieBanner() {
 
   return (
     <div className={styles.banner} role="dialog" aria-live="polite" aria-label="Aviso de cookies">
-      <p className={styles.text}>Usamos cookies para medir nuestras campañas.</p>
+      <p className={styles.text}>Usamos cookies para medir nuestras campañas. <a href="/privacidad#cookies" className={styles.more}>Más info</a></p>
       <button className={styles.accept} onClick={() => choose('granted')}>Aceptar</button>
       <button className={styles.close} onClick={() => choose('denied')} aria-label="Solo cookies necesarias" title="Solo necesarias">×</button>
     </div>
