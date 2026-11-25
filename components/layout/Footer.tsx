@@ -16,7 +16,7 @@ export default function Footer() {
             <span>📍</span> Barcelona, España
           </div>
           <div className={styles.contact}>
-            <span>✉️</span> <a href="mailto:uh.dev@flowcode.cc" style={{ color: 'inherit' }}>uh.dev@flowcode.cc</a>
+            <span>✉️</span> <a href="mailto:hola@universohosteleria.es" style={{ color: 'inherit' }}>hola@universohosteleria.es</a>
           </div>
         </div>
         <div>
@@ -41,7 +41,7 @@ export default function Footer() {
           <div className={styles.colLabel}>Soporte</div>
           <ul className={styles.links}>
             <li><Link href="/#especialista">Hablar con un especialista</Link></li>
-            <li><Link href="mailto:uh.dev@flowcode.cc">Contacto</Link></li>
+            <li><Link href="mailto:hola@universohosteleria.es">Contacto</Link></li>
             <li><Link href="/legal">Aviso legal</Link></li>
             <li><Link href="/privacidad">Privacidad</Link></li>
           </ul>

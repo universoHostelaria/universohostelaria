@@ -208,7 +208,7 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
     name: 'Universo Hostelería',
     desc: 'El mayor marketplace de mobiliario para hostelería en España. 15+ fabricantes y, en breve, más de 10.000 productos. Un especialista para ti.',
     location: 'Barcelona, España',
-    email: 'uh.dev@flowcode.cc',
+    email: 'hola@universohosteleria.es',
     cols: [
       {
         label: 'CATÁLOGO',
@@ -233,7 +233,7 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
         label: 'SOPORTE',
         links: [
           { label: 'Hablar con un especialista', href: '/#especialista' },
-          { label: 'Contacto', href: 'mailto:uh.dev@flowcode.cc' },
+          { label: 'Contacto', href: 'mailto:hola@universohosteleria.es' },
           { label: 'Envíos', href: '/#como-funciona' },
           { label: 'Aviso legal', href: '/' },
           { label: 'Privacidad', href: '/' },
