@@ -102,7 +102,7 @@ export default function ProductActions({ product: p }: Props) {
       <div className={styles.trust}>
         {[
           'Entrega coordinada en toda España',
-          'Precio directo de fabricante',
+          'Precio final con IVA, sin costes ocultos',
           'Especialista disponible para tu proyecto',
         ].map(t => (
           <div key={t} className={styles.trustItem}>

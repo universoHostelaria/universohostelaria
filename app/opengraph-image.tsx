@@ -61,7 +61,7 @@ export default async function OpengraphImage() {
         </div>
 
         <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
-          {['15+ fabricantes europeos', 'Precio directo de fábrica', 'Entrega en toda España'].map((t) => (
+          {['15+ fabricantes europeos', 'Precio cerrado, IVA incluido', 'Entrega en toda España'].map((t) => (
             <div
               key={t}
               style={{

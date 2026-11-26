@@ -150,8 +150,8 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
       },
       {
         num: '0€',
-        title: 'DE COMISIONES EXTRA',
-        desc: 'Precio directo del fabricante a tu local. Sin capas, sin markups ocultos, sin tener que pasar por nadie. Tu presupuesto va íntegro al mobiliario.',
+        title: 'DE COSTES OCULTOS',
+        desc: 'Precio final con IVA a la vista y presupuesto cerrado antes de confirmar. Sin sorpresas en la factura.',
       },
       {
         num: '360°',
@@ -200,7 +200,7 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
     steps: [
       { num: '01', title: 'EXPLORA', desc: 'En breve, más de 10.000 productos de 15+ fabricantes. Filtra, compara, guarda favoritos.' },
       { num: '02', title: 'HABLA CON EL ESPECIALISTA', desc: 'Cita gratuita para afinar plazos, colores y cantidades.' },
-      { num: '03', title: 'CONFIRMA EL PEDIDO', desc: 'Factura proforma directa al fabricante. Sin sorpresas.' },
+      { num: '03', title: 'CONFIRMA EL PEDIDO', desc: 'Te enviamos una factura proforma con el precio cerrado. Sin sorpresas.' },
       { num: '04', title: 'RECIBE EN TU LOCAL', desc: 'Entrega coordinada en toda España. Te acompañamos hasta el final.' },
     ],
   },

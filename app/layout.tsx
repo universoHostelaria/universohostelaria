@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     template: '%s | Universo Hostelería',
   },
   description:
-    'Marketplace de mobiliario profesional para hostelería en España: sillas, mesas, taburetes y mobiliario de exterior de 15+ fabricantes europeos. Precio directo de fábrica y entrega en toda España.',
+    'Marketplace de mobiliario profesional para hostelería en España: sillas, mesas, taburetes y mobiliario de exterior de 15+ fabricantes europeos. Precio cerrado y entrega en toda España.',
   keywords: SECTOR_KEYWORDS,
   applicationName: SITE_NAME,
   authors: [{ name: SITE_NAME }],
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     url: SITE_URL,
     title: 'Universo Hostelería — Mobiliario para bares, restaurantes y hoteles',
     description:
-      'Sillas, mesas, taburetes y mobiliario de exterior para hostelería. 15+ fabricantes europeos, precio directo de fábrica, entrega en toda España.',
+      'Sillas, mesas, taburetes y mobiliario de exterior para hostelería. 15+ fabricantes europeos, precio cerrado y entrega en toda España.',
   },
   twitter: {
     card: 'summary_large_image',

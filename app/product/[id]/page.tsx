@@ -27,7 +27,7 @@ function productDescription(p: {
     'para hostelería.',
     p.uso ? `Uso ${p.uso.toLowerCase()}.` : '',
     'Mobiliario profesional para bares, restaurantes y hoteles.',
-    'Precio directo de fábrica y entrega en toda España.',
+    'Precio cerrado y entrega en toda España.',
   ]
     .filter(Boolean)
     .join(' ')
